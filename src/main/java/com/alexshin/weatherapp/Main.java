@@ -31,7 +31,7 @@ public class Main {
             transaction = session.beginTransaction();
 
             session.persist(user);
-            session.persist(location);
+//            session.persist(location);
 
 //            User user1 = session.get(User.class, 2L);
 //            session.remove(user1);
@@ -40,14 +40,17 @@ public class Main {
             System.out.println();
 
 
-
-
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             throw e;
         }
+
+    }
+
+
+    public static void main1(String[] args) {
 
     }
 

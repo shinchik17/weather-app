@@ -18,6 +18,8 @@ ext {
     slf4jVersion = '2.0.13'
     servletApiVersion = '6.0.0'
     hikaricpVersion = "5.1.0"
+    flywayVersion = "10.17.1"
+
 }
 
 
@@ -44,6 +46,9 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     implementation "com.zaxxer:HikariCP:${hikaricpVersion}"
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+//    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+    implementation "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
+
 
 
     testCompileOnly "org.projectlombok:lombok:${slf4jVersion}"
