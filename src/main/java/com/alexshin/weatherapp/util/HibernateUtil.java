@@ -8,6 +8,9 @@ import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.Map;
+import java.util.Properties;
+
 public final class HibernateUtil {
     @Getter
     private static final SessionFactory sessionFactory;
@@ -17,43 +20,37 @@ public final class HibernateUtil {
         throw new UnsupportedOperationException();
     }
 
-    ;
-
     static {
+
         try {
             configuration = new Configuration();
-            configuration.addAnnotatedClass(User.class);
-            configuration.addAnnotatedClass(Location.class);
-            configuration.addAnnotatedClass(Session.class);
-
-            // TODO: try to come back to one custom application.properties file
-
-//            for (Map.Entry<Object, Object> entry : PropertiesUtil.getAllProperties().entrySet()) {
-//                String propertyName = entry.getKey().toString();
-//                if (!propertyName.startsWith("hibernate.")) {
-//                    String propertyValue = entry.getValue().toString();
-//                    configuration.setProperty(propertyName, propertyValue);
-//                }
-//            }
-
-//            PropertiesUtil.getAllProperties().entrySet().stream()
-//                    .filter(entry -> entry.getKey().toString().startsWith("hibernate."))
-//                    .forEach(
-//                            entry -> configuration.setProperty(
-//                                    entry.getKey().toString(),
-//                                    entry.getValue().toString()
-//                            )
-//                    );
-
-
-//            configuration.configure("hibernate.properties");
+            setConfigurationProperties(PropertiesUtil.getAllProperties());
             sessionFactory = configuration.buildSessionFactory();
-
             runFlywayMigration();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void setConfigurationProperties(Properties properties) {
+
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            String propertyName = entry.getKey().toString();
+            String propertyValue = entry.getValue().toString();
+
+            if (propertyName.startsWith("hibernate.")) {
+                configuration.setProperty(propertyName, propertyValue);
+            } else if (propertyName.startsWith("ds.")) {
+                configuration.setProperty(
+                        "hibernate.connection." + propertyName.substring(3),
+                        propertyValue);
+            }
+        }
+
+        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Location.class);
+        configuration.addAnnotatedClass(Session.class);
     }
 
 

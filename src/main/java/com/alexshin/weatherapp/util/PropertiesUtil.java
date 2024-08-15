@@ -8,6 +8,7 @@ import java.util.Properties;
 
 public final class PropertiesUtil {
     public static final String PROPERTIES_FILENAME = "application.properties";
+
     private static final Properties properties = new Properties();
 
 
