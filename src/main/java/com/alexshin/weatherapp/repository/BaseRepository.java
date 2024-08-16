@@ -1,6 +1,7 @@
 package com.alexshin.weatherapp.repository;
 
 import com.alexshin.weatherapp.entity.BaseEntity;
+import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -72,15 +73,17 @@ public class BaseRepository<K extends Serializable, E extends BaseEntity<K>> imp
 
 
     protected <R> R runWithinTxAndReturn(Function<Session, R> sessionFunc) {
-        R result;
         var session = sessionFactory.openSession();
+        R result;
         Transaction transaction = session.beginTransaction();
-        try (session) {
+        try {
             result = sessionFunc.apply(session);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
-            throw new RuntimeException(e);
+            throw new BaseRepositoryException(e);
+        } finally {
+            session.close();
         }
 
         return result;
