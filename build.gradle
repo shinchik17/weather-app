@@ -19,7 +19,8 @@ ext {
     servletApiVersion = '6.0.0'
     hikaricpVersion = "5.1.0"
     flywayVersion = "10.17.1"
-
+    h2Version = "2.2.224"
+    testContainersVersion = "1.19.8"
 }
 
 
@@ -42,19 +43,20 @@ dependencies {
     implementation "org.hibernate:hibernate-core:${hibernateVersion}"
     runtimeOnly "org.postgresql:postgresql:${pgVersion}"
     compileOnly "jakarta.servlet:jakarta.servlet-api:${servletApiVersion}"
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     implementation "com.zaxxer:HikariCP:${hikaricpVersion}"
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"
-//    implementation "org.flywaydb:flyway-core:${flywayVersion}"
     implementation "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
 
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-
-    testCompileOnly "org.projectlombok:lombok:${slf4jVersion}"
-    testAnnotationProcessor "org.projectlombok:lombok:${slf4jVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+//    testImplementation "com.h2database:h2:${h2Version}"
+    implementation "org.testcontainers:postgresql:${testContainersVersion}"
+
 }
 
 test {
