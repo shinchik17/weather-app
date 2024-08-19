@@ -17,10 +17,11 @@ ext {
     lombokVersion = '1.18.34'
     slf4jVersion = '2.0.13'
     servletApiVersion = '6.0.0'
-    hikaricpVersion = "5.1.0"
+    hikariCPVersion = "5.1.0"
     flywayVersion = "10.17.1"
     h2Version = "2.2.224"
     testContainersVersion = "1.19.8"
+    log4jVersion = "2.23.1"
 }
 
 
@@ -43,8 +44,8 @@ dependencies {
     implementation "org.hibernate:hibernate-core:${hibernateVersion}"
     runtimeOnly "org.postgresql:postgresql:${pgVersion}"
     compileOnly "jakarta.servlet:jakarta.servlet-api:${servletApiVersion}"
-    implementation "com.zaxxer:HikariCP:${hikaricpVersion}"
-    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
+    implementation "org.hibernate:hibernate-hikaricp:${hibernateVersion}"
     implementation "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -54,9 +55,13 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-//    testImplementation "com.h2database:h2:${h2Version}"
     implementation "org.testcontainers:postgresql:${testContainersVersion}"
+//    testImplementation "com.h2database:h2:${h2Version}"
 
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jVersion}"
 }
 
 test {
