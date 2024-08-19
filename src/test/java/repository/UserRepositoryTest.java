@@ -13,30 +13,44 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-// todo: cover other repository tests
+
 public class UserRepositoryTest {
-    SessionFactory sessionFactory = HibernateTestUtil.getSessionFactory();
-    UserRepository userRepo = new UserRepository(sessionFactory);
+    SessionFactory sessionFactory;
+    UserRepository userRepo;
     User transientUser;
 
     long PERSIST_USER_ID = 1L;
     long DELETE_USER_ID = 4L;
     long NONEXISTENT_USER_ID = 100L;
+    String PERSIST_USER_LOGIN = "test_username1";
     String UPDATED_LOGIN = "MERGED_LOGIN";
 
 
     @BeforeEach
     void setup() {
+        sessionFactory = HibernateTestUtil.buildSessionFactory();
+        userRepo = new UserRepository(sessionFactory);
+
         transientUser = User.builder()
                 .login("test_transient")
                 .password("transient_pass")
                 .build();
+
     }
 
     @Test()
     void save() {
         userRepo.save(transientUser);
         Assertions.assertTrue(userRepo.findById(transientUser.getId()).isPresent());
+    }
+
+    @Test()
+    void save_ifLoginExists() {
+        User transientUser2 = User.builder()
+                .login(PERSIST_USER_LOGIN)
+                .password("transient_pass")
+                .build();
+        Assertions.assertThrows(BaseRepositoryException.class, () -> userRepo.save(transientUser2));
     }
 
     @Test

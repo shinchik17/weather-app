@@ -20,5 +20,17 @@ public final class MigrationUtil {
         flyway.migrate();
     }
 
+    public static void cleanDS(Configuration dsConfig){
+        Flyway flyway = Flyway.configure()
+                .dataSource(
+                        dsConfig.getProperty("hibernate.connection.url"),
+                        dsConfig.getProperty("hibernate.connection.username"),
+                        dsConfig.getProperty("hibernate.connection.password")
+                )
+                .cleanDisabled(false)
+                .load();
+        flyway.clean();
+    }
+
 
 }

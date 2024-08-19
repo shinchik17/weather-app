@@ -4,7 +4,6 @@ package com.alexshin.weatherapp.util;
 import com.alexshin.weatherapp.entity.Location;
 import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.entity.UserSession;
-import lombok.Getter;
 import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -14,10 +13,9 @@ import java.util.Map;
 import java.util.Properties;
 
 
+
 public final class HibernateTestUtil {
 
-    @Getter
-    private static final SessionFactory sessionFactory;
     private static final Configuration configuration;
 
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
@@ -29,15 +27,7 @@ public final class HibernateTestUtil {
             // TODO: remove duplicate code of buildConfiguration()
             postgres.start();
             configuration = buildConfiguration(PropertiesUtil.getAllProperties());
-            configuration.setProperty("hibernate.connection.url", postgres.getJdbcUrl());
-            configuration.setProperty("hibernate.connection.username", postgres.getUsername());
-            configuration.setProperty("hibernate.connection.password", postgres.getPassword());
-            sessionFactory = configuration.buildSessionFactory();
-
-            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
-                MigrationUtil.runFlywayMigration(configuration);
-            }
-
+//            Flyway.configure().cleanDisabled(false);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -59,6 +49,10 @@ public final class HibernateTestUtil {
             }
         }
 
+        cfg.setProperty("hibernate.connection.url", postgres.getJdbcUrl());
+        cfg.setProperty("hibernate.connection.username", postgres.getUsername());
+        cfg.setProperty("hibernate.connection.password", postgres.getPassword());
+
         cfg.addAnnotatedClass(User.class);
         cfg.addAnnotatedClass(Location.class);
         cfg.addAnnotatedClass(UserSession.class);
@@ -66,6 +60,19 @@ public final class HibernateTestUtil {
         return cfg;
     }
 
+
+    public static SessionFactory buildSessionFactory() {
+        try {
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
+                MigrationUtil.cleanDS(configuration);
+                MigrationUtil.runFlywayMigration(configuration);
+            }
+            return sessionFactory;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }
