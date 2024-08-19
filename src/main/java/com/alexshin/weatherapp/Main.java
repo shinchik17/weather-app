@@ -15,6 +15,7 @@ public class Main {
 
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
+
         User user = User.builder()
                 .login("username@mail.ru")
                 .password("password")
@@ -29,6 +30,7 @@ public class Main {
 
         Transaction transaction = null;
         try (var session = sessionFactory.openSession()) {
+            session.getTransaction();
             transaction = session.beginTransaction();
 
 

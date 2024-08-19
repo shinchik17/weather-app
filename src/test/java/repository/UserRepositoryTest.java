@@ -20,14 +20,16 @@ public class UserRepositoryTest {
     User transientUser;
 
     long PERSIST_USER_ID = 1L;
+    long DELETE_USER_ID = 4L;
     long NONEXISTENT_USER_ID = 100L;
+    String UPDATED_LOGIN = "MERGED_LOGIN";
 
 
     @BeforeEach
     void setup() {
         transientUser = User.builder()
-                .login("test_login1")
-                .password("test_pass1")
+                .login("test_transient")
+                .password("transient_pass")
                 .build();
     }
 
@@ -50,16 +52,27 @@ public class UserRepositoryTest {
     @Test
     void update_ifExists() {
         User user = userRepo.findById(PERSIST_USER_ID).orElseThrow();
-        user.setLogin("MERGED_LOGIN");
+        user.setLogin(UPDATED_LOGIN);
         userRepo.update(user);
-        Assertions.assertEquals(user.getLogin(), "MERGED_LOGIN");
+        Assertions.assertEquals(userRepo.findById(PERSIST_USER_ID).orElseThrow().getLogin(), UPDATED_LOGIN);
 
     }
 
     @Test
     void update_ifNotExists() {
-        transientUser.setLogin("MERGED_LOGIN");
+        transientUser.setLogin(UPDATED_LOGIN);
         Assertions.assertThrows(BaseRepositoryException.class, () -> userRepo.update(transientUser));
+    }
+
+    @Test
+    void delete_ifExists() {
+        userRepo.delete(DELETE_USER_ID);
+        Assertions.assertTrue(userRepo.findById(DELETE_USER_ID).isEmpty(), UPDATED_LOGIN);
+    }
+
+    @Test
+    void delete_ifNotExists() {
+        Assertions.assertThrows(BaseRepositoryException.class, () -> userRepo.delete(NONEXISTENT_USER_ID));
     }
 
 
