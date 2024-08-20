@@ -1,0 +1,46 @@
+
+html {
+    font-size: 1.3rem;
+}
+
+body {
+    display: flex;
+    border: 5px solid black;
+}
+
+
+.container {
+    border: 5px solid purple;
+    margin: 0 auto;
+    /*padding: 200px 0 0 ;*/
+}
+
+.form-group {
+    border: 3px solid green;
+}
+.form-group button {
+    margin: 0 auto;
+}
+
+.container .header {
+    margin-top: 8rem;
+    /*overflow: hidden;*/
+}
+
+
+.ref-btn {
+    border: 2px solid red;
+    padding: 20px;
+}
+
+
+.btn {
+    border-radius: 1rem;
+    margin: 0 auto;
+    display: flex;
+}
+
+.row div{
+    padding: 10px;
+    /*margin-bottom: 5px;*/
+}
