@@ -19,9 +19,10 @@ body {
     font-size: 1.5rem;
     /*padding: 200px 0 0 ;*/
 }
-.container .header {
-    margin-top: 8rem;
+.container.header {
+    /*margin-top: 5rem;*/
     /*overflow: hidden;*/
+    /*padding-bottom: 2rem;*/
 }
 
 .form-group {
@@ -38,16 +39,23 @@ body {
 
 .ref-btn {
     border: 2px solid red;
-    padding: 20px;
+    padding: 30px;
 }
 
 .btn {
-    border-radius: 1rem;
-    margin: 0 auto;
-    display: flex;
+    border-radius: 3rem;
+    margin: 0 2rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 2rem;
+}
+
+h1 {
+    font-size: 4rem;
+    padding-bottom: 2rem;
 }
 
 .row div{
     padding: 10px;
     /*margin-bottom: 5px;*/
 }
+
