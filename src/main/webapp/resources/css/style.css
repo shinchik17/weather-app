@@ -1,10 +1,14 @@
+root {
+    --bs-dropdown-link-hover-bg: black;
+}
+
 
 html {
-    font-size: 1.3rem;
+    /*font-size: 1.5rem;*/
 }
 
 body {
-    display: flex;
+    /*display: flex;*/
     border: 5px solid black;
 }
 
@@ -12,27 +16,30 @@ body {
 .container {
     border: 5px solid purple;
     margin: 0 auto;
+    font-size: 1.5rem;
     /*padding: 200px 0 0 ;*/
 }
-
-.form-group {
-    border: 3px solid green;
-}
-.form-group button {
-    margin: 0 auto;
-}
-
 .container .header {
     margin-top: 8rem;
     /*overflow: hidden;*/
 }
 
+.form-group {
+    border: 3px solid green;
+}
+
+.form-group label {
+    /*font-size: 1.5rem;*/
+}
+
+/*input[type="text"] {*/
+/*    font-size: 0.7rem;*/
+/*}*/
 
 .ref-btn {
     border: 2px solid red;
     padding: 20px;
 }
-
 
 .btn {
     border-radius: 1rem;
