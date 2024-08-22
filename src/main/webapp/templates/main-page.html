@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <link href="../resources/css/all.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="../resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="../resources/css/style.css" rel="stylesheet">
     <title>Main page</title>
@@ -19,7 +21,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="#">
+                        <i class="fas fa-home"></i> Home</a>
                 </li>
             </ul>
             <div class="container-fluid">
@@ -32,16 +35,81 @@
             <div class="dropdown navbar-nav">
                 <a class="dropdown-toggle nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                    aria-expanded="false">
-                    #Username
-                </a>
+                    <i class="fas fa-user-circle"></i> Username</a>
                 <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#">Log out</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i>
+                        Log out</a>
+                    </li>
                 </ul>
             </div>
 
         </div>
     </div>
 </nav>
+
+<div class="container row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <span class="container d-flex justify-content-end p-0">
+                    <a class="btn-close" role="button">
+<!--                        <i class="fas fa-remove fs-3"></i>-->
+                    </a>
+<!--                    <button type="button" class="btn-close" aria-label="Close"></button>-->
+                </span>
+                <h5 class="card-title mb-4 d-flex">Location name</h5>
+
+
+                <!--                <button type="button" class="btn-close" aria-label="Close"></button>-->
+
+
+                <p><i class="fas fa-thermometer-half"></i>
+                    Temperature: <span class="temperature" th:text="${city.main.temp}"></span> °C
+                </p>
+                <p><i class="fas fa-temperature-low"></i>
+                    Feels Like: <span class="feelsLike" th:text="${city.main.feelsLike}"></span> °C
+                </p>
+                <p><i class="fas fa-tachometer-alt"></i>
+                    Pressure: <span th:text="${city.main.pressure}"></span> hPa
+                </p>
+                <p><i class="fas fa-tint"></i>
+                    Humidity: <span th:text="${city.main.humidity}"></span> %
+                </p>
+                <p><i class="fas fa-wind"></i>
+                    Wind Speed: <span th:text="${city.wind.speed}"></span> m/s
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a short card.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional
+                    content.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional
+                    content. This content is a little bit longer.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script src="../resources/js/bootstrap.bundle.min.js"></script>
