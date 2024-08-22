@@ -2,13 +2,7 @@ root {
     --bs-dropdown-link-hover-bg: black;
 }
 
-
-html {
-    /*font-size: 1.5rem;*/
-}
-
 body {
-    /*display: flex;*/
     border: 5px solid black;
 }
 
@@ -20,9 +14,9 @@ body {
     /*padding: 200px 0 0 ;*/
 }
 .container.header {
-    /*margin-top: 5rem;*/
+    /*margin-bottom: 15rem;*/
     /*overflow: hidden;*/
-    /*padding-bottom: 2rem;*/
+    /*padding-bottom: 5rem;*/
 }
 
 .form-group {
@@ -30,30 +24,54 @@ body {
 }
 
 .form-group label {
-    /*font-size: 1.5rem;*/
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+}
+.form-group .btn {
+    padding: 5px 20px;
+    font-size: 1.5rem;
+    border-radius: 2rem;
 }
 
-/*input[type="text"] {*/
-/*    font-size: 0.7rem;*/
-/*}*/
+input[type="text"] {
+    border-radius: 0.5rem;
+    /*max-width: 800px;*/
+}
+
+input[type="search"] {
+    border-radius: 1rem;
+    max-width: 500px;
+}
 
 .ref-btn {
     border: 2px solid red;
     padding: 30px;
 }
 
-.btn {
+.btn.big {
     border-radius: 3rem;
-    margin: 0 2rem;
+    margin: 0 3rem;
     padding: 0.5rem 1.5rem;
     font-size: 2rem;
 }
 
-h1 {
-    font-size: 4rem;
-    padding-bottom: 2rem;
+.btn {
+    border-radius: 1rem;
 }
 
+h1 {
+    /*font-size: 8rem;*/
+    /*margin-bottom: 5rem;*/
+    /*padding-bottom: 5rem;*/
+}
+
+.display-1 {
+    padding-bottom: 5rem
+}
+
+.display-3 {
+    padding: 4rem 0 1rem;
+}
 .row div{
     padding: 10px;
     /*margin-bottom: 5px;*/
