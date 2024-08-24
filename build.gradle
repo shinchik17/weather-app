@@ -22,6 +22,7 @@ ext {
     h2Version = "2.2.224"
     testContainersVersion = "1.19.8"
     log4jVersion = "2.23.1"
+    thymeleafVersion = "3.1.2.RELEASE"
 }
 
 
@@ -62,6 +63,10 @@ dependencies {
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jVersion}"
+
+
+    implementation "org.thymeleaf:thymeleaf:${thymeleafVersion}"
+
 }
 
 test {

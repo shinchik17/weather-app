@@ -1,10 +1,9 @@
 package com.alexshin.weatherapp.util;
 
 import com.alexshin.weatherapp.entity.Location;
-import com.alexshin.weatherapp.entity.UserSession;
 import com.alexshin.weatherapp.entity.User;
+import com.alexshin.weatherapp.entity.UserSession;
 import lombok.Getter;
-import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
