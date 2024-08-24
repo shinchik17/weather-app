@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    <link href="../resources/css/all.min.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="../resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../resources/css/style.css" rel="stylesheet">
-    <title>Main page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!--    <link href="../../resources/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--    <link href="../../resources/css/style.css" rel="stylesheet">-->
+    <link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/resources/css/style.css}" rel="stylesheet">
+    <title>Search results</title>
 </head>
 <body>
 
@@ -21,23 +22,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">
+                    <a class="nav-link active" aria-current="page" th:href="@{/home}">
                         <i class="fas fa-home"></i> Home</a>
                 </li>
             </ul>
             <div class="container-fluid">
-                <form class="d-flex justify-content-center">
+                <form th:action="@{/search-results}" method="get" class="d-flex justify-content-center">
                     <input class="form-control me-2" type="search" placeholder="Search for locations"
                            aria-label="Search">
                     <button class="btn btn-outline-primary" type="submit">Search</button>
                 </form>
             </div>
             <div class="dropdown navbar-nav">
-                <a class="dropdown-toggle nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                   aria-expanded="false">
+                <a class="dropdown-toggle nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                   aria-expanded="false" th:text="${username}">
                     <i class="fas fa-user-circle"></i> Username</a>
                 <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i>
+                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i>
                         Log out</a>
                     </li>
                 </ul>
@@ -47,37 +48,44 @@
     </div>
 </nav>
 
-<div class="container row row-cols-1 row-cols-md-3 g-4">
-    <div class="col">
+<div class="container row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+    <div class="col" th:each="location : ${foundLocations}">
         <div class="card h-100">
             <div class="card-body">
-                <span class="container d-flex justify-content-end p-0">
-                    <a class="btn-close" role="button">
-<!--                        <i class="fas fa-remove fs-3"></i>-->
-                    </a>
-<!--                    <button type="button" class="btn-close" aria-label="Close"></button>-->
-                </span>
-                <h5 class="card-title mb-4 d-flex">Location name</h5>
-
-
-                <!--                <button type="button" class="btn-close" aria-label="Close"></button>-->
-
+                <!--TODO: add checkboxes for selection more than 1 location-->
+                <h5 class="card-title mb-4 d-flex justify-content-between" th:text="${location.name}">
+                    Location name
+                </h5>
 
                 <p><i class="fas fa-thermometer-half"></i>
-                    Temperature: <span class="temperature" th:text="${city.main.temp}"></span> °C
+                    Temperature: <span class="temperature" th:text="${location.temperature}"></span> °C
                 </p>
                 <p><i class="fas fa-temperature-low"></i>
-                    Feels Like: <span class="feelsLike" th:text="${city.main.feelsLike}"></span> °C
+                    Feels Like: <span class="feelsLike" th:text="${location.feelsLike}"></span> °C
                 </p>
                 <p><i class="fas fa-tachometer-alt"></i>
-                    Pressure: <span th:text="${city.main.pressure}"></span> hPa
+                    Pressure: <span th:text="${location.pressure}"></span> hPa
                 </p>
                 <p><i class="fas fa-tint"></i>
-                    Humidity: <span th:text="${city.main.humidity}"></span> %
+                    Humidity: <span th:text="${location.humidity}"></span> %
                 </p>
                 <p><i class="fas fa-wind"></i>
-                    Wind Speed: <span th:text="${city.wind.speed}"></span> m/s
+                    Wind Speed: <span th:text="${location.windSpeed}"></span> m/s
                 </p>
+
+                <form th:action="@{/home}" method="post">
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">Select</button>
+                    </div>
+                </form>
+<!--                <div class="form-group text-center">-->
+<!--                    <a class="btn btn-primary" role="button" th:action="@{/home}" th:method="post">Select</a>-->
+<!--                </div>-->
+                <!--                <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">-->
+                <!--                <label class="btn btn-outline-primary" for="btn-check-outlined">Select</label><br>-->
+
+                <!--                <input type="checkbox" class="btn-check" id="btn-check-2-outlined" autocomplete="off">-->
+                <!--                <label class="btn btn-outline-secondary" for="btn-check-2-outlined">Select</label><br>-->
 
 
             </div>
@@ -111,7 +119,7 @@
     </div>
 </div>
 
-
-<script src="../resources/js/bootstrap.bundle.min.js"></script>
+<!--<script src="../../resources/js/bootstrap.bundle.min.js"></script>-->
+<script th:src="@{/resources/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
