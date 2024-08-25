@@ -17,7 +17,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class BaseRepository<K extends Serializable, E extends BaseEntity<K>> implements Repository<K, E> {
 
-    private final Class<E> clazz;
+    protected final Class<E> clazz;
     private final SessionFactory sessionFactory;
 
     @Override

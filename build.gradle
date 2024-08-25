@@ -23,6 +23,7 @@ ext {
     testContainersVersion = "1.19.8"
     log4jVersion = "2.23.1"
     thymeleafVersion = "3.1.2.RELEASE"
+    jBCryptVersion = "0.4"
 }
 
 
@@ -48,6 +49,7 @@ dependencies {
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "org.hibernate:hibernate-hikaricp:${hibernateVersion}"
     implementation "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
+    implementation "org.mindrot:jbcrypt:${jBCryptVersion}"
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -66,6 +68,8 @@ dependencies {
 
 
     implementation "org.thymeleaf:thymeleaf:${thymeleafVersion}"
+
+
 
 }
 

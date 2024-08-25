@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "sessions", schema = "public")
-public class UserSession {
+public class UserSession implements BaseEntity<String> {
 
     @Id
     private String id;
@@ -22,6 +22,6 @@ public class UserSession {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime expires_at;
+    private LocalDateTime expiresAt;
 
 }

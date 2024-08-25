@@ -8,7 +8,7 @@ import jakarta.servlet.annotation.WebListener;
 import org.thymeleaf.ITemplateEngine;
 
 @WebListener
-public class ApplicationStartupListener implements ServletContextListener {
+public class ServletListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
