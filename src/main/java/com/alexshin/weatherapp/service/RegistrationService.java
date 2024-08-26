@@ -4,7 +4,8 @@ package com.alexshin.weatherapp.service;
 import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
-import org.mindrot.jbcrypt.BCrypt;
+
+import static com.alexshin.weatherapp.util.EncryptUtil.hashPassword;
 
 public class RegistrationService {
     private static final RegistrationService INSTANCE = new RegistrationService();
@@ -22,15 +23,12 @@ public class RegistrationService {
     public void register(String login, String password) {
         User user = User.builder()
                 .login(login)
-                .password(encryptPassword(password))
+                .password(hashPassword(password))
                 .build();
         userRepository.save(user);
     }
 
 
-    public String encryptPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
 
 
 }

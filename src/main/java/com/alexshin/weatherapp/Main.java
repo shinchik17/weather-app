@@ -3,6 +3,9 @@ package com.alexshin.weatherapp;
 import com.alexshin.weatherapp.entity.Location;
 import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.repository.BaseRepository;
+import com.alexshin.weatherapp.service.AuthorizationService;
+import com.alexshin.weatherapp.service.RegistrationService;
+import com.alexshin.weatherapp.util.EncryptUtil;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -55,12 +58,18 @@ public class Main {
 
 
     public static void main(String[] args) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        var repo = new BaseRepository<Long, User>(User.class, sessionFactory);
+
+        var reg = RegistrationService.getInstance();
+        var auth = AuthorizationService.getInstance();
+
+        String pass1 = "pass1";
+
+        String hash1 =  EncryptUtil.hashPassword(pass1);
+        String hash2 =  EncryptUtil.hashPassword(pass1);
+
+        System.out.println(hash1.equals(hash2));
 
 
-        var user = repo.findById(1L);
-        
 
     }
 

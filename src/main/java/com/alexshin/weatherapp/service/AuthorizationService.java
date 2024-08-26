@@ -9,15 +9,15 @@ import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.repository.UserSessionRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.util.PropertiesUtil;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.alexshin.weatherapp.util.EncryptUtil.passwordMatches;
+
 public class AuthorizationService {
     private static final AuthorizationService INSTANCE = new AuthorizationService();
-    private static final String salt = BCrypt.gensalt();
     private final UserRepository userRepository = new UserRepository(HibernateUtil.getSessionFactory());
     private final UserSessionRepository userSessionRepository = new UserSessionRepository(HibernateUtil.getSessionFactory());
 
@@ -38,11 +38,9 @@ public class AuthorizationService {
             throw new NoSuchUserException("No user with login '%s'.".formatted(login));
         }
 
-        // TODO: BCryptUtil
         User user = optUser.get();
-        String recvPassword = BCrypt.hashpw(password, salt);
 
-        if (!recvPassword.equals(user.getPassword())) {
+        if (passwordMatches(password, user.getPassword())) {
             throw new IncorrectPasswordException("Incorrect password");
         }
 
