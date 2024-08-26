@@ -16,7 +16,7 @@ public class LoginServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processTemplate("/login", req, resp);
+        processTemplate("login", req, resp);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class LoginServlet extends BaseServlet {
         resp.addCookie(new Cookie("SessionId", userSession.getId()));
 
         String path = getServletContext().getContextPath();
-        resp.sendRedirect("%s/home".formatted(path));
+        resp.sendRedirect("%s/".formatted(path));
 
 
     }

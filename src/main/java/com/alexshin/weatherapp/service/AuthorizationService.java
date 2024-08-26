@@ -40,7 +40,7 @@ public class AuthorizationService {
 
         User user = optUser.get();
 
-        if (passwordMatches(password, user.getPassword())) {
+        if (!passwordMatches(password, user.getPassword())) {
             throw new IncorrectPasswordException("Incorrect password");
         }
 
@@ -52,7 +52,7 @@ public class AuthorizationService {
     public UserSession createSession(User user) {
         UUID sessionId = UUID.randomUUID();
         LocalDateTime expiresAt = LocalDateTime.now().plusDays(
-                Long.parseLong(PropertiesUtil.getProperty("lifespan_hours"))
+                Long.parseLong(PropertiesUtil.getProperty("session.lifespan_hours"))
         );
 
         UserSession userSession = UserSession.builder()
