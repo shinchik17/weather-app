@@ -9,8 +9,10 @@ import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.repository.UserSessionRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.util.PropertiesUtil;
+import jakarta.persistence.NoResultException;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,14 +33,12 @@ public class AuthorizationService {
 
     public UserSession logIn(String login, String password) {
 
-        // TODO: handle NoResult
-        Optional<User> optUser = userRepository.findByLogin(login);
-
-        if (optUser.isEmpty()) {
+        User user;
+        try {
+            user = userRepository.findByLogin(login).orElseThrow();
+        } catch (NoResultException | NoSuchElementException e) {
             throw new NoSuchUserException("No user with login '%s'.".formatted(login));
         }
-
-        User user = optUser.get();
 
         if (!passwordMatches(password, user.getPassword())) {
             throw new IncorrectPasswordException("Incorrect password");
@@ -51,9 +51,8 @@ public class AuthorizationService {
     // TODO: extract to UserSessionService?
     public UserSession createSession(User user) {
         UUID sessionId = UUID.randomUUID();
-        LocalDateTime expiresAt = LocalDateTime.now().plusDays(
-                Long.parseLong(PropertiesUtil.getProperty("session.lifespan_hours"))
-        );
+        long hoursLifespan = Long.parseLong(PropertiesUtil.getProperty("session.hours_lifespan"));
+        LocalDateTime expiresAt = LocalDateTime.now().plusDays(hoursLifespan);
 
         UserSession userSession = UserSession.builder()
                 .id(sessionId.toString())
@@ -66,6 +65,10 @@ public class AuthorizationService {
 
         return userSession;
 
+    }
+
+    public void logOut(String login){
+        userSessionRepository.deleteByUserLogin(login);
     }
 
 }

@@ -28,4 +28,24 @@ public class UserRepository extends BaseRepository<Long, User> {
         );
 
     }
+
+    public Optional<User> findBySessionId(String userSessionId) {
+        return runWithinTxAndReturn(
+                session -> {
+                    String sqlString = """
+                            SELECT user FROM User user
+                            JOIN UserSession userSession on user = userSession.user
+                            WHERE userSession.id = :userSessionId
+                            """;
+                    Query<User> query = session.createQuery(sqlString, clazz);
+                    query.setParameter("userSessionId", userSessionId);
+                    try {
+                        return Optional.of(query.getSingleResult());
+                    } catch (NoResultException e) {
+                        return Optional.empty();
+                    }
+                }
+        );
+    }
+
 }
