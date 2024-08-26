@@ -22,6 +22,7 @@ public class UserSession implements BaseEntity<String> {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 
 }
