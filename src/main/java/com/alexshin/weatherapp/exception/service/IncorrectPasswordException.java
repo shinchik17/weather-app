@@ -5,7 +5,4 @@ public class IncorrectPasswordException extends RuntimeException {
         super(message);
     }
 
-    public IncorrectPasswordException(Throwable cause) {
-        super(cause);
-    }
 }

@@ -11,7 +11,6 @@ import java.io.IOException;
 
 public class BaseFilter extends HttpFilter {
 
-
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
 //        ServletContext servletContext = request.getServletContext();

@@ -13,33 +13,41 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-@WebServlet(urlPatterns = "")
-public class HomeServlet extends BaseServlet {
+import static com.alexshin.weatherapp.util.ParsingUtil.parseLocationName;
+
+
+@WebServlet(urlPatterns = "/search-results")
+public class SearchLocationServlet extends HttpServlet {
     private final UserService userService = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         try {
+            String locationName = parseLocationName(req.getParameter("location-name"));
             String sessionId = Arrays.stream(req.getCookies())
                     .filter(cookie -> cookie.getName().equals("SessionId"))
                     .findAny()
                     .orElseThrow()
                     .getValue();
-
-            // TODO: DTO's with mapper?
             User user = userService.findUserBySession(sessionId);
             req.setAttribute("username", user.getLogin());
-            processTemplate("home", req, resp);
-
+            // TODO: implement method
         } catch (IllegalArgumentException e) {
             // TODO: handle exception
             throw new RuntimeException(e);
-        } catch (NoSuchElementException e){
-
-            processTemplate("home-unauthorized", req, resp);
-//            String path = getServletContext().getContextPath() + "/home-unauthorized";
-//            req.getRequestDispatcher(path).forward(req, resp);
+        } catch (NoSuchElementException e) {
+            String path = getServletContext().getContextPath() + "/home-unauthorized";
+            req.getRequestDispatcher(path).forward(req, resp);
         }
 
+
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
+
+
 }
