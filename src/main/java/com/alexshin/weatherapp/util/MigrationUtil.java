@@ -6,7 +6,7 @@ import org.hibernate.cfg.Configuration;
 public final class MigrationUtil {
 
     private MigrationUtil() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("MigrationUtil cannot be instantiated");
     }
 
     public static void runFlywayMigration(Configuration dsConfig) {

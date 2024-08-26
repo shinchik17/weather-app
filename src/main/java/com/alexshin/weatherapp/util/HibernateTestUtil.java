@@ -20,6 +20,10 @@ public final class HibernateTestUtil {
 
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
 
+    private HibernateTestUtil(){
+        throw new UnsupportedOperationException("HibernateTestUtil cannot be instantiated");
+    }
+
 
     static {
         try {
@@ -27,7 +31,6 @@ public final class HibernateTestUtil {
             // TODO: remove duplicate code of buildConfiguration()
             postgres.start();
             configuration = buildConfiguration(PropertiesUtil.getAllProperties());
-//            Flyway.configure().cleanDisabled(false);
 
         } catch (Exception e) {
             throw new RuntimeException(e);

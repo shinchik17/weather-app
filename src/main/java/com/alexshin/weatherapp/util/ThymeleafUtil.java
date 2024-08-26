@@ -9,7 +9,6 @@ import org.thymeleaf.context.IWebContext;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.WebApplicationTemplateResolver;
-import org.thymeleaf.web.IWebApplication;
 import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 

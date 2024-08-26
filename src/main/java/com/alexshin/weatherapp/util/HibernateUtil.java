@@ -16,7 +16,7 @@ public final class HibernateUtil {
     private static final Configuration configuration;
 
     private HibernateUtil() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("HibernateUtil cannot be instantiated");
     }
 
     static {
