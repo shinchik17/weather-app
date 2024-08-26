@@ -23,7 +23,6 @@ public class BaseServlet extends HttpServlet {
     protected void processTemplate(String templateName, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         IWebContext webContext = ThymeleafUtil.buildWebContext(req, resp, getServletContext());
         templateEngine.process(templateName, webContext, resp.getWriter());
-
     }
 
 

@@ -31,7 +31,7 @@ public class LoginServlet extends BaseServlet {
         resp.addCookie(new Cookie("SessionId", userSession.getId()));
 
         String path = getServletContext().getContextPath();
-        resp.sendRedirect("%s/.".formatted(path));
+        resp.sendRedirect("%s/home".formatted(path));
 
 
     }

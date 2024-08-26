@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--    <link href="../../resources/css/bootstrap.min.css" rel="stylesheet">-->
     <!--    <link href="../../resources/css/style.css" rel="stylesheet">-->
-        <link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
-        <link th:href="@{/resources/css/style.css}" rel="stylesheet">
+    <link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/resources/css/style.css}" rel="stylesheet">
     <title>Registration</title>
 </head>
 <body>
@@ -20,16 +20,19 @@
             <form th:action="@{/registration}" method="post">
                 <div class="form-group">
                     <label for="login">Login</label>
-                    <input class="form-control" type="text" name="login" id="login" required placeholder="Enter your login"
+                    <input class="form-control" type="text" name="login" id="login" required
+                           placeholder="Enter your login"
                            pattern="[a-zA-Z0-9_]{4,}">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input class="form-control" type="text" name="password" id="password" required placeholder="Enter your password">
+                    <input class="form-control" type="text" name="password" id="password" required
+                           placeholder="Enter your password">
                 </div>
                 <div class="form-group">
                     <label for="pass-repeat">Repeat password</label>
-                    <input class="form-control" type="text" name="pass-repeat" id="pass-repeat" required placeholder="Repeat password">
+                    <input class="form-control" type="text" name="pass-repeat" id="pass-repeat" required
+                           placeholder="Repeat password">
                 </div>
                 <div class="form-group d-flex justify-content-center">
                     <button type="submit" class="btn btn-primary">Confirm</button>
