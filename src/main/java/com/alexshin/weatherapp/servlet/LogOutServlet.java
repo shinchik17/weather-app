@@ -22,6 +22,7 @@ public class LogOutServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
 
+            // TODO: test deleting 0 lines
             String login = parseLogin(req.getParameter("login"));
             authorizationService.logOut(login);
 
@@ -36,7 +37,7 @@ public class LogOutServlet extends BaseServlet {
             throw new RuntimeException(e);
         }
 
-        processTemplate("login", req, resp);
+//        processTemplate("login", req, resp);
     }
 
 

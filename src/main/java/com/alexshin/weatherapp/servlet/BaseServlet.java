@@ -10,6 +10,7 @@ import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.IWebContext;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class BaseServlet extends HttpServlet {
     private ITemplateEngine templateEngine;
@@ -23,6 +24,15 @@ public class BaseServlet extends HttpServlet {
     protected void processTemplate(String templateName, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         IWebContext webContext = ThymeleafUtil.buildWebContext(req, resp, getServletContext());
         templateEngine.process(templateName, webContext, resp.getWriter());
+    }
+
+    protected String getSessionId(HttpServletRequest req){
+        return Arrays.stream(req.getCookies())
+                .filter(cookie -> cookie.getName().equals("SessionId"))
+                .findAny()
+                .orElseThrow()
+                .getValue();
+
     }
 
 

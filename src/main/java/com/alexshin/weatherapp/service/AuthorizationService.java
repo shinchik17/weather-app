@@ -5,23 +5,17 @@ import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.entity.UserSession;
 import com.alexshin.weatherapp.exception.service.IncorrectPasswordException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
-import com.alexshin.weatherapp.repository.UserRepository;
-import com.alexshin.weatherapp.repository.UserSessionRepository;
-import com.alexshin.weatherapp.util.HibernateUtil;
-import com.alexshin.weatherapp.util.PropertiesUtil;
+import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
 import jakarta.persistence.NoResultException;
 
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.alexshin.weatherapp.util.EncryptUtil.passwordMatches;
 
 public class AuthorizationService {
     private static final AuthorizationService INSTANCE = new AuthorizationService();
-    private final UserRepository userRepository = new UserRepository(HibernateUtil.getSessionFactory());
-    private final UserSessionRepository userSessionRepository = new UserSessionRepository(HibernateUtil.getSessionFactory());
+    private final UserService userService = UserService.getInstance();
+    private final UserSessionService userSessionService = UserSessionService.getInstance();
 
     private AuthorizationService() {
     }
@@ -35,7 +29,7 @@ public class AuthorizationService {
 
         User user;
         try {
-            user = userRepository.findByLogin(login).orElseThrow();
+            user = userService.findByLogin(login).orElseThrow();
         } catch (NoResultException | NoSuchElementException e) {
             throw new NoSuchUserException("No user with login '%s'.".formatted(login));
         }
@@ -44,31 +38,26 @@ public class AuthorizationService {
             throw new IncorrectPasswordException("Incorrect password");
         }
 
-        return createSession(user);
+        return userSessionService.createSession(user);
     }
 
-
-    // TODO: extract to UserSessionService?
-    public UserSession createSession(User user) {
-        UUID sessionId = UUID.randomUUID();
-        long hoursLifespan = Long.parseLong(PropertiesUtil.getProperty("session.hours_lifespan"));
-        LocalDateTime expiresAt = LocalDateTime.now().plusDays(hoursLifespan);
-
-        UserSession userSession = UserSession.builder()
-                .id(sessionId.toString())
-                .user(user)
-                .expiresAt(expiresAt)
-                .build();
-
-
-        userSessionRepository.save(userSession);
-
-        return userSession;
-
+    public void logOut(String login) {
+        userSessionService.deleteByUserLogin(login);
     }
 
-    public void logOut(String login){
-        userSessionRepository.deleteByUserLogin(login);
+    public User findUserBySession(String sessionId) {
+
+        try {
+            userSessionService.updateUserSessionState(sessionId);
+
+            return userService.findUserBySession(sessionId);
+
+        } catch (NoSuchUserException e) {
+            throw new NoSuchUserException("No user found for given SessionId");
+        } catch (NoSuchElementException e) {
+            throw new NoSuchUserSessionException("No session found for given SessionId");
+        }
+
     }
 
 }

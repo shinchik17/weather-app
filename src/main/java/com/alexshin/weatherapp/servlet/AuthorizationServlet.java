@@ -34,8 +34,8 @@ public class AuthorizationServlet extends BaseServlet {
 
             // TODO: mapper
             Cookie cookie = new Cookie("SessionId", userSession.getId());
-            long age = ChronoUnit.HOURS.between(userSession.getExpiresAt(), LocalDateTime.now());
-            cookie.setMaxAge((int) age);
+            long age = ChronoUnit.HOURS.between(LocalDateTime.now(), userSession.getExpiresAt());
+            cookie.setMaxAge((int) age*3600);
             resp.addCookie(new Cookie("SessionId", userSession.getId()));
 
             String path = getServletContext().getContextPath() + "/";
@@ -47,24 +47,5 @@ public class AuthorizationServlet extends BaseServlet {
 
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            String login = parseLogin(req.getParameter("login"));
-
-            authorizationService.logOut(login);
-
-            Cookie cookie = new Cookie("SessionId", "");
-            cookie.setMaxAge(0);
-            resp.addCookie(cookie);
-
-            String path = getServletContext().getContextPath() + "/";
-            resp.sendRedirect(path);
-        } catch (IllegalArgumentException e) {
-            // TODO: handle exception
-            throw new RuntimeException(e);
-        }
-
-    }
 
 }

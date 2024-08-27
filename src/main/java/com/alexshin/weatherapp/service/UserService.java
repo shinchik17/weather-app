@@ -2,26 +2,19 @@ package com.alexshin.weatherapp.service;
 
 
 import com.alexshin.weatherapp.entity.User;
-import com.alexshin.weatherapp.entity.UserSession;
-import com.alexshin.weatherapp.exception.service.IncorrectPasswordException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
+import com.alexshin.weatherapp.exception.service.SuchUserExistsException;
 import com.alexshin.weatherapp.repository.UserRepository;
-import com.alexshin.weatherapp.repository.UserSessionRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
-import com.alexshin.weatherapp.util.PropertiesUtil;
 import jakarta.persistence.NoResultException;
+import org.hibernate.exception.ConstraintViolationException;
 
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.UUID;
-
-import static com.alexshin.weatherapp.util.EncryptUtil.passwordMatches;
 
 public class UserService {
     private static final UserService INSTANCE = new UserService();
     private final UserRepository userRepository = new UserRepository(HibernateUtil.getSessionFactory());
-    private final UserSessionRepository userSessionRepository = new UserSessionRepository(HibernateUtil.getSessionFactory());
 
     private UserService() {
     }
@@ -31,7 +24,16 @@ public class UserService {
     }
 
 
-    public User findUserBySession(String sessionId){
+    public void save(User user) {
+        try {
+            userRepository.save(user);
+        } catch (ConstraintViolationException e) {
+            throw new SuchUserExistsException("User with login %s is already registered.");
+        }
+    }
+
+    // TODO: extend so that delete session when it expires
+    public User findUserBySession(String sessionId) {
 
         try {
             return userRepository.findBySessionId(sessionId).orElseThrow();
@@ -39,6 +41,10 @@ public class UserService {
             throw new NoSuchUserException("No user found for current SessionId");
         }
 
+    }
+
+    public Optional<User> findByLogin(String login) {
+        return userRepository.findByLogin(login);
     }
 
 
