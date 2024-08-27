@@ -5,10 +5,7 @@ import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.util.HibernateTestUtil;
-import com.alexshin.weatherapp.util.HibernateUtil;
 import org.hibernate.SessionFactory;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +42,7 @@ public class UserRepositoryTest {
     }
 
     @Test()
-    void save_ifLoginExists() {
+    void save_ifLoginExists_thenThrow() {
         User transientUser2 = User.builder()
                 .login(PERSIST_USER_LOGIN)
                 .password("transient_pass")
@@ -73,7 +70,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void update_ifNotExists() {
+    void update_ifNotExists_thenThrow() {
         transientUser.setLogin(UPDATED_LOGIN);
         Assertions.assertThrows(BaseRepositoryException.class, () -> userRepo.update(transientUser));
     }
@@ -85,10 +82,14 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void delete_ifNotExists() {
+    void delete_ifNotExists_thenThrow() {
         Assertions.assertThrows(BaseRepositoryException.class, () -> userRepo.delete(NONEXISTENT_USER_ID));
     }
 
+    @Test
+    void findAll_ifExist() {
+        Assertions.assertFalse(userRepo.findAll().isEmpty());
+    }
 
 
 }
