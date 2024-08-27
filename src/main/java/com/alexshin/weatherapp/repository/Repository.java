@@ -18,11 +18,7 @@ public interface Repository<K extends Serializable, E extends BaseEntity<K>>{
 
     void delete(K id);
 
-    default Optional<E> findById(K id) {
-        return findById(id, emptyMap());
-    }
-
-    Optional<E> findById(K id, Map<String, Object> properties);
+    Optional<E> findById(K id);
 
     List<E> findAll();
 

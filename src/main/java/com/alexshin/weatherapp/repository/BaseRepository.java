@@ -46,7 +46,7 @@ public class BaseRepository<K extends Serializable, E extends BaseEntity<K>> imp
     }
 
     @Override
-    public Optional<E> findById(K id, Map<String, Object> properties) {
+    public Optional<E> findById(K id) {
         return Optional.ofNullable(runWithinTxAndReturn(em -> em.find(clazz, id)));
     }
 
