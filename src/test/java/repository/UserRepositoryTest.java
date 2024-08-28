@@ -17,9 +17,10 @@ public class UserRepositoryTest {
     User transientUser;
 
     long PERSIST_USER_ID = 1L;
-    long DELETE_USER_ID = 4L;
     long NONEXISTENT_USER_ID = 100L;
-    String PERSIST_USER_LOGIN = "test_username1";
+    String PERSISTENT_USER_LOGIN = "test_username1";
+    String PERSISTENT_SESSION_ID = "test_session_id1";
+    String NONEXISTENT_SESSION_ID = "test_session_id100";
     String UPDATED_LOGIN = "MERGED_LOGIN";
 
 
@@ -44,7 +45,7 @@ public class UserRepositoryTest {
     @Test()
     void save_ifLoginExists_thenThrow() {
         User transientUser2 = User.builder()
-                .login(PERSIST_USER_LOGIN)
+                .login(PERSISTENT_USER_LOGIN)
                 .password("transient_pass")
                 .build();
         Assertions.assertThrows(BaseRepositoryException.class, () -> userRepo.save(transientUser2));
@@ -77,8 +78,8 @@ public class UserRepositoryTest {
 
     @Test
     void delete_ifExists() {
-        userRepo.delete(DELETE_USER_ID);
-        Assertions.assertTrue(userRepo.findById(DELETE_USER_ID).isEmpty(), UPDATED_LOGIN);
+        userRepo.delete(PERSIST_USER_ID);
+        Assertions.assertTrue(userRepo.findById(PERSIST_USER_ID).isEmpty());
     }
 
     @Test
@@ -87,9 +88,35 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void findAll_ifExist() {
+    void findAll_ifAnyExist() {
         Assertions.assertFalse(userRepo.findAll().isEmpty());
     }
 
+    @Test
+    void findAll_ifNoAnyExist() {
+        userRepo.delete(1L);
+        userRepo.delete(2L);
+        Assertions.assertTrue(userRepo.findAll().isEmpty());
+    }
+
+    @Test
+    void findByLogin_ifExists(){
+        Assertions.assertTrue(userRepo.findByLogin(PERSISTENT_USER_LOGIN).isPresent());
+    }
+
+    @Test
+    void findByLogin_ifNotExists(){
+        Assertions.assertTrue(userRepo.findByLogin(PERSISTENT_USER_LOGIN).isPresent());
+    }
+
+    @Test
+    void findBySessionId_ifExists(){
+        Assertions.assertTrue(userRepo.findBySessionId(PERSISTENT_SESSION_ID).isPresent());
+    }
+
+    @Test
+    void findBySessionId_ifNotExists(){
+        Assertions.assertTrue(userRepo.findBySessionId(NONEXISTENT_SESSION_ID).isEmpty());
+    }
 
 }

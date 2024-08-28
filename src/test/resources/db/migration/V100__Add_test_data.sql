@@ -1,17 +1,13 @@
 INSERT INTO users (login, password)
 VALUES ('test_username1', 'test_pass1'),
-       ('test_username2', 'test_pass2'),
-       ('test_username3', 'test_pass3'),
-       ('delete_username', 'test_pass4');
+       ('test_username2', 'test_pass2');
 
 INSERT INTO locations (name, user_id, latitude, longitude)
-VALUES ('test_loc1', 2, 0.1, 0.2),
-       ('test_loc2', 2, 0.1, 0.2),
-       ('test_loc3', 3, 0.1, 0.2),
-       ('test_loc4', 4, 0.1, 0.2);
+VALUES ('test_loc_name1', 1, 0.1, 0.2),
+       ('test_loc_name2', 2, 0.1, 0.2),
+       ('test_loc_name3', 1, 0.1, 0.2);
+
 
 INSERT INTO sessions (id, user_id, expires_at)
-VALUES ('test_string_id1', 3, current_timestamp),
-       ('test_string_id2', 3, current_timestamp),
-       ('test_string_id3', 3, current_timestamp),
-       ('test_string_id4', 4, current_timestamp);
+VALUES ('test_session_id1', 1, CURRENT_TIMESTAMP),
+       ('test_session_id2', 2, CURRENT_TIMESTAMP - INTERVAL '1 YEAR');
