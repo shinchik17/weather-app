@@ -3,17 +3,12 @@ package com.alexshin.weatherapp.servlet;
 import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.exception.service.AuthenticationException;
 import com.alexshin.weatherapp.service.AuthorizationService;
-import com.alexshin.weatherapp.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.internal.SessionImpl;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 @WebServlet(urlPatterns = "")

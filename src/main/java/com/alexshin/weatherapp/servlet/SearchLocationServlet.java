@@ -2,7 +2,6 @@ package com.alexshin.weatherapp.servlet;
 
 import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.service.AuthorizationService;
-import com.alexshin.weatherapp.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;

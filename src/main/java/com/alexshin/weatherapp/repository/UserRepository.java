@@ -33,9 +33,9 @@ public class UserRepository extends BaseRepository<Long, User> {
         return runWithinTxAndReturn(
                 session -> {
                     String sqlString = """
-                            SELECT user FROM User user
-                            JOIN UserSession userSession on user = userSession.user
-                            WHERE userSession.id = :userSessionId
+                            FROM User u
+                            JOIN UserSession us on u = us.user
+                            WHERE us.id = :userSessionId
                             """;
                     Query<User> query = session.createQuery(sqlString, clazz);
                     query.setParameter("userSessionId", userSessionId);

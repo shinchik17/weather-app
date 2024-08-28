@@ -4,7 +4,6 @@ package com.alexshin.weatherapp.util;
 import com.alexshin.weatherapp.entity.Location;
 import com.alexshin.weatherapp.entity.User;
 import com.alexshin.weatherapp.entity.UserSession;
-import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -27,7 +26,6 @@ public final class HibernateTestUtil {
 
     static {
         try {
-            // TODO: add logging jdbc url
             // TODO: remove duplicate code of buildConfiguration()
             postgres.start();
             configuration = buildConfiguration(PropertiesUtil.getAllProperties());
