@@ -1,14 +1,15 @@
 package com.alexshin.weatherapp.service;
 
 
-import com.alexshin.weatherapp.entity.User;
-import com.alexshin.weatherapp.entity.UserSession;
+import com.alexshin.weatherapp.model.entity.User;
+import com.alexshin.weatherapp.model.entity.UserSession;
 import com.alexshin.weatherapp.exception.service.UserSessionExpiredException;
 import com.alexshin.weatherapp.repository.UserSessionRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.util.PropertiesUtil;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserSessionService {
@@ -17,6 +18,7 @@ public class UserSessionService {
 
     private UserSessionService() {
     }
+
 
     public static UserSessionService getInstance() {
         return INSTANCE;
@@ -38,9 +40,11 @@ public class UserSessionService {
 
     }
 
+
     public void deleteByUserLogin(String login) {
         userSessionRepository.deleteByUserLogin(login);
     }
+
 
     public void updateUserSessionState(String id) {
         UserSession userSession = userSessionRepository.findById(id).orElseThrow();
@@ -56,9 +60,11 @@ public class UserSessionService {
 
     }
 
+
     private boolean isValidSession(UserSession userSession){
         return userSession.getExpiresAt().isAfter(LocalDateTime.now());
     }
+
 
     private LocalDateTime getDefaultLifespan(){
         long hoursLifespan = Long.parseLong(PropertiesUtil.getProperty("session.hours_lifespan"));

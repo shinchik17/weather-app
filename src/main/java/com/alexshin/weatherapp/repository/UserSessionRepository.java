@@ -1,6 +1,6 @@
 package com.alexshin.weatherapp.repository;
 
-import com.alexshin.weatherapp.entity.UserSession;
+import com.alexshin.weatherapp.model.entity.UserSession;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.MutationQuery;
 

@@ -1,9 +1,8 @@
-package repository;
+package com.alexshin.weatherapp.repository;
 
 
-import com.alexshin.weatherapp.entity.User;
+import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
-import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.util.HibernateTestUtil;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;

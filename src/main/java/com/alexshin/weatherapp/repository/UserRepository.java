@@ -1,6 +1,6 @@
 package com.alexshin.weatherapp.repository;
 
-import com.alexshin.weatherapp.entity.User;
+import com.alexshin.weatherapp.model.entity.User;
 import jakarta.persistence.NoResultException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

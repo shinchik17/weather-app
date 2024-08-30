@@ -2,11 +2,11 @@ package com.alexshin.weatherapp.util;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public final class EncryptUtil {
+public final class EncryptionUtil {
     private static final String salt = BCrypt.gensalt();
 
-    private EncryptUtil(){
-        throw new UnsupportedOperationException("EncryptUtil cannot be instantiated");
+    private EncryptionUtil(){
+        throw new UnsupportedOperationException("EncryptionUtil cannot be instantiated");
     }
 
 

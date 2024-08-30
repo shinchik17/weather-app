@@ -1,6 +1,6 @@
 package com.alexshin.weatherapp.repository;
 
-import com.alexshin.weatherapp.entity.BaseEntity;
+import com.alexshin.weatherapp.model.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.util.List;

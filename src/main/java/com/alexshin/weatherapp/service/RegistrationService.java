@@ -1,9 +1,10 @@
 package com.alexshin.weatherapp.service;
 
 
-import com.alexshin.weatherapp.entity.User;
+import com.alexshin.weatherapp.model.dto.UserDTO;
+import com.alexshin.weatherapp.model.entity.User;
 
-import static com.alexshin.weatherapp.util.EncryptUtil.hashPassword;
+import static com.alexshin.weatherapp.util.EncryptionUtil.hashPassword;
 
 public class RegistrationService {
     private static final RegistrationService INSTANCE = new RegistrationService();
@@ -16,13 +17,13 @@ public class RegistrationService {
         return INSTANCE;
     }
 
-    //TODO: dto
-    public void register(String login, String password) {
-        User user = User.builder()
-                .login(login)
-                .password(hashPassword(password))
-                .build();
-        userService.save(user);
+    public void register(UserDTO user) {
+        userService.save(
+                User.builder()
+                        .login(user.getLogin())
+                        .password(hashPassword(user.getPassword()))
+                        .build()
+        );
     }
 
 

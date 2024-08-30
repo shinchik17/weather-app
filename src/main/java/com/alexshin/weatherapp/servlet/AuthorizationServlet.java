@@ -1,15 +1,14 @@
 package com.alexshin.weatherapp.servlet;
 
-import com.alexshin.weatherapp.entity.UserSession;
+import com.alexshin.weatherapp.model.dto.UserDTO;
+import com.alexshin.weatherapp.model.dto.UserSessionDTO;
 import com.alexshin.weatherapp.service.AuthorizationService;
+import com.alexshin.weatherapp.util.CookieUtil;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
@@ -26,20 +25,16 @@ public class AuthorizationServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            String login = parseLogin(req.getParameter("login"));
-            String password = parsePassword(req.getParameter("password"));
+            UserDTO userDTO = new UserDTO(
+                    parseLogin(req.getParameter("login")),
+                    parsePassword(req.getParameter("password"))
+            );
 
-            // TODO: create records dto?
-            UserSession userSession = authorizationService.logIn(login, password);
+            UserSessionDTO session = authorizationService.logIn(userDTO);
+            CookieUtil.setSessionCookie(resp, session);
 
-            // TODO: mapper
-            Cookie cookie = new Cookie("SessionId", userSession.getId());
-            long age = ChronoUnit.HOURS.between(LocalDateTime.now(), userSession.getExpiresAt());
-            cookie.setMaxAge((int) age*3600);
-            resp.addCookie(new Cookie("SessionId", userSession.getId()));
+            resp.sendRedirect(rootPath);
 
-            String path = getServletContext().getContextPath() + "/";
-            resp.sendRedirect(path);
         } catch (IllegalArgumentException e) {
             // TODO: handle exception
             throw new RuntimeException(e);

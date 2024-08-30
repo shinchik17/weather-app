@@ -24,6 +24,12 @@ ext {
     log4jVersion = "2.23.1"
     thymeleafVersion = "3.1.2.RELEASE"
     jBCryptVersion = "0.4"
+    mockitoVersion = "5.12.0"
+    modelMapperVersion = "3.2.1"
+    jacksonMapperVersion = "2.17.2"
+
+
+
 }
 
 
@@ -43,6 +49,7 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
 
+    // src dependencies
     implementation "org.hibernate:hibernate-core:${hibernateVersion}"
     runtimeOnly "org.postgresql:postgresql:${pgVersion}"
     compileOnly "jakarta.servlet:jakarta.servlet-api:${servletApiVersion}"
@@ -50,25 +57,28 @@ dependencies {
     implementation "org.hibernate:hibernate-hikaricp:${hibernateVersion}"
     implementation "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
     implementation "org.mindrot:jbcrypt:${jBCryptVersion}"
-
+    implementation "org.thymeleaf:thymeleaf:${thymeleafVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonMapperVersion}"
 
+    // test dependencies
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    implementation "org.testcontainers:postgresql:${testContainersVersion}"
+    implementation "org.testcontainers:postgresql:${testContainersVersion}" // testImpl is not sufficient
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+
 //    testImplementation "com.h2database:h2:${h2Version}"
 
+    // logging dependencies
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jVersion}"
-
-
-    implementation "org.thymeleaf:thymeleaf:${thymeleafVersion}"
-
 
 
 }

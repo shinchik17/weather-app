@@ -1,9 +1,9 @@
 package com.alexshin.weatherapp.util;
 
 
-import com.alexshin.weatherapp.entity.Location;
-import com.alexshin.weatherapp.entity.User;
-import com.alexshin.weatherapp.entity.UserSession;
+import com.alexshin.weatherapp.model.entity.Location;
+import com.alexshin.weatherapp.model.entity.User;
+import com.alexshin.weatherapp.model.entity.UserSession;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.testcontainers.containers.PostgreSQLContainer;

@@ -1,7 +1,9 @@
 package com.alexshin.weatherapp.service;
 
 
-import com.alexshin.weatherapp.entity.User;
+import com.alexshin.weatherapp.model.Mapper;
+import com.alexshin.weatherapp.model.dto.UserSessionDTO;
+import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
 import com.alexshin.weatherapp.exception.service.SuchUserExistsException;
 import com.alexshin.weatherapp.repository.UserRepository;
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class UserService {
     private static final UserService INSTANCE = new UserService();
     private final UserRepository userRepository = new UserRepository(HibernateUtil.getSessionFactory());
+    private final Mapper mapper = new Mapper();
 
     private UserService() {
     }
@@ -33,7 +36,7 @@ public class UserService {
     }
 
     // TODO: extend so that delete session when it expires
-    public User findUserBySession(String sessionId) {
+    public User findUserBySessionId(String sessionId) {
 
         try {
             return userRepository.findBySessionId(sessionId).orElseThrow();

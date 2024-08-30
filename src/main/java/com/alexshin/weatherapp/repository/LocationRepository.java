@@ -1,6 +1,6 @@
 package com.alexshin.weatherapp.repository;
 
-import com.alexshin.weatherapp.entity.Location;
+import com.alexshin.weatherapp.model.entity.Location;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 

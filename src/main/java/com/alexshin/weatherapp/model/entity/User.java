@@ -1,4 +1,4 @@
-package com.alexshin.weatherapp.entity;
+package com.alexshin.weatherapp.model.entity;
 
 
 import jakarta.persistence.*;
