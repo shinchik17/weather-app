@@ -20,10 +20,13 @@ public final class CookieUtil {
     }
 
     public static Optional<String> extractSessionCookie(HttpServletRequest req) {
+        if (req.getCookies() == null){
+            return Optional.empty();
+        }
         return Arrays.stream(req.getCookies())
                 .filter(cookie -> cookie.getName().equals("SessionId"))
                 .findAny()
-                .map(Cookie::getName);
+                .map(Cookie::getValue);
 
     }
 

@@ -1,7 +1,8 @@
 package com.alexshin.weatherapp;
 
-import com.alexshin.weatherapp.entity.Location;
-import com.alexshin.weatherapp.entity.User;
+
+import com.alexshin.weatherapp.model.entity.Location;
+import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

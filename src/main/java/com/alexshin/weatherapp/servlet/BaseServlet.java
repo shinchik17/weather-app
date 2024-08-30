@@ -26,7 +26,7 @@ public class BaseServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.templateEngine = (ITemplateEngine) getServletContext().getAttribute("templateEngine");
-        this.rootPath = getServletContext().getContextPath();
+        this.rootPath = getServletContext().getContextPath() + "/";
     }
 
     protected void processTemplate(String templateName, HttpServletRequest req, HttpServletResponse resp) throws IOException {
