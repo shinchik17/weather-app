@@ -1,6 +1,7 @@
 package com.alexshin.weatherapp.filter;
 
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,9 +14,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 // TODO: create error html-template and its support
-@WebFilter(urlPatterns = "/")
+@WebFilter(urlPatterns = "/", filterName = "BaseFilter")
 public class BaseFilter extends HttpFilter {
-    protected final Set<String> ALLOWED_URL_SET = new HashSet<>(Set.of(
+    protected final Set<String> ALLOWED_SERVLET_PATHS = new HashSet<>(Set.of(
             "", "/registration", "/login", "/logout", "/search-results"
     ));
     private final Logger logger = LogManager.getLogger();
@@ -24,16 +25,16 @@ public class BaseFilter extends HttpFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         String servletPath = req.getServletPath();
         String method = req.getMethod();
-        logger.info("BaseFilter -> Enter doFilter(), servletPath: %s, method: %s".formatted(servletPath, method));
+        logger.info("%s -> Enter doFilter(), servletPath: %s, method: %s".formatted(getFilterName(), servletPath, method));
 
-        if (ALLOWED_URL_SET.contains(servletPath)) {
+        if (ALLOWED_SERVLET_PATHS.contains(servletPath)) {
             chain.doFilter(req, resp);
-            logger.info("BaseFilter -> Process to the next filter");
+            logger.info("%s -> Process to the next filter".formatted(getFilterName()));
             return;
         }
 
         redirectToRootContext(resp);
-        logger.info("BaseFilter -> Redirect to the rootContext");
+        logger.info("%s -> Redirect to the rootContext".formatted(getFilterName()));
 
     }
 

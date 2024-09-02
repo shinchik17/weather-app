@@ -35,7 +35,6 @@ public class UserService {
         }
     }
 
-    // TODO: extend so that delete session when it expires
     public User findUserBySessionId(String sessionId) {
 
         try {

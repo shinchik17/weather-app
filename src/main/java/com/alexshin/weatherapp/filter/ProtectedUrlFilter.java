@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = {"/search-results"})
+@WebFilter(urlPatterns = {"/search-results", "/logout"}, filterName = "ProtectedUrlFilter")
 public class ProtectedUrlFilter extends BaseFilter {
     private final Logger logger = LogManager.getLogger();
     private final AuthorizationService authService = AuthorizationService.getInstance();
@@ -23,13 +23,13 @@ public class ProtectedUrlFilter extends BaseFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         String servletPath = req.getServletPath();
         String method = req.getMethod();
-        logger.info("ProtectedUrlFilter -> Enter doFilter(), servletPath: %s, method: %s".formatted(servletPath, method));
+        logger.info("%s -> Enter doFilter(), servletPath: %s, method: %s".formatted(getFilterName(), servletPath, method));
 
         Optional<String> optSessionId = CookieUtil.extractSessionCookie(req);
 
         if (optSessionId.isEmpty()) {
             redirectToRootContext(resp);
-            logger.info("ProtectedUrlFilter -> Session is empty, redirect to the rootContext");
+            logger.info("%s -> Session is empty, redirect to the rootContext".formatted(getFilterName()));
             return;
         }
 
@@ -40,6 +40,6 @@ public class ProtectedUrlFilter extends BaseFilter {
         }
 
         chain.doFilter(req, resp);
-        logger.info("ProtectedUrlFilter -> Process to next filter");
+        logger.info("%s -> Process to next filter".formatted(getFilterName()));
     }
 }

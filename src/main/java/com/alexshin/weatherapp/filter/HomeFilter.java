@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(servletNames = "HomeServlet")
+@WebFilter(servletNames = "HomeServlet", filterName = "HomeFilter")
 public class HomeFilter extends ProtectedUrlFilter {
     private final Logger logger = LogManager.getLogger();
     private final AuthorizationService authService = AuthorizationService.getInstance();
@@ -22,12 +22,12 @@ public class HomeFilter extends ProtectedUrlFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         String servletPath = req.getServletPath();
         String method = req.getMethod();
-        logger.info("HomeFilter -> Enter doFilter(), servletPath: %s, method: %s".formatted(servletPath, method));
+        logger.info("%s -> Enter doFilter(), servletPath: %s, method: %s".formatted(getFilterName(), servletPath, method));
 
         Optional<String> optSessionId = CookieUtil.extractSessionCookie(req);
 
         if (optSessionId.isEmpty()) {
-            logger.info("HomeFilter -> Session is empty");
+            logger.info("HomeFilter -> Session is empty".formatted());
         } else {
             Optional<Object> optUser = Optional.ofNullable(req.getAttribute("user"));
             if (optUser.isEmpty()) {

@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = {"/login", "/registration"})
+@WebFilter(urlPatterns = {"/login", "/registration"}, filterName = "AuthFilter")
 public class AuthFilter extends BaseFilter {
     private final Logger logger = LogManager.getLogger();
 
@@ -21,19 +21,19 @@ public class AuthFilter extends BaseFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         String servletPath = req.getServletPath();
         String method = req.getMethod();
-        logger.info("AuthFilter -> Enter doFilter(), servletPath: %s, method: %s".formatted(servletPath, method));
+
+        logger.info("%s -> Enter doFilter(), servletPath: %s, method: %s".formatted(getFilterName(), servletPath, method));
 
         Optional<String> optSessionId = CookieUtil.extractSessionCookie(req);
 
         if (optSessionId.isPresent()) {
             redirectToRootContext(resp);
-            logger.info("AuthFilter -> Session presents, redirect to the rootContext");
+            logger.info("%s -> Session presents, redirect to the rootContext".formatted(getFilterName()));
             return;
         }
 
-
         chain.doFilter(req, resp);
-        logger.info("AuthFilter -> Process to next filter");
+        logger.info("%s -> Process to next filter".formatted(getFilterName()));
 
     }
 

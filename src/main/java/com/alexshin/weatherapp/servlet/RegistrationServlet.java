@@ -1,16 +1,13 @@
 package com.alexshin.weatherapp.servlet;
 
-import com.alexshin.weatherapp.exception.parsing.PasswordsDoNotMatchException;
 import com.alexshin.weatherapp.exception.service.AuthenticationException;
 import com.alexshin.weatherapp.model.dto.UserDTO;
-import com.alexshin.weatherapp.service.AuthorizationService;
 import com.alexshin.weatherapp.service.RegistrationService;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
@@ -23,7 +20,7 @@ public class RegistrationServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-            processTemplate("registration", req, resp);
+        processTemplate("registration", req, resp);
     }
 
 
@@ -31,9 +28,8 @@ public class RegistrationServlet extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         try {
-            // TODO: check login unique
-            // TODO: implement session service, setting id etc
 
+            // TODO: check login unique
             UserDTO user = new UserDTO(
                     parseLogin(req.getParameter("login")),
                     parsePassword(req.getParameter("password")),
