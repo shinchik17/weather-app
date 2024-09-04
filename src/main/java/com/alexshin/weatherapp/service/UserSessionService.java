@@ -1,15 +1,19 @@
 package com.alexshin.weatherapp.service;
 
 
+import com.alexshin.weatherapp.exception.service.NoSuchUserException;
+import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.model.entity.UserSession;
 import com.alexshin.weatherapp.exception.service.UserSessionExpiredException;
 import com.alexshin.weatherapp.repository.UserSessionRepository;
+//import com.alexshin.weatherapp.util.HibernateTestUtil;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.util.PropertiesUtil;
+import jakarta.persistence.NoResultException;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class UserSessionService {
@@ -57,6 +61,17 @@ public class UserSessionService {
         userSession.setExpiresAt(getDefaultLifespan());
         userSessionRepository.update(userSession);
 
+
+    }
+
+
+    public UserSession findByUserLogin(String login) {
+
+        try {
+            return userSessionRepository.findByUserLogin(login).orElseThrow();
+        } catch (NoResultException | NoSuchElementException e) {
+            throw new NoSuchUserSessionException("No session found for given user found");
+        }
 
     }
 

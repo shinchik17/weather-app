@@ -20,7 +20,7 @@ ext {
     hikariCPVersion = "5.1.0"
     flywayVersion = "10.17.1"
     h2Version = "2.2.224"
-    testContainersVersion = "1.19.8"
+    testContainersVersion = "1.20.1"
     log4jVersion = "2.23.1"
     thymeleafVersion = "3.1.2.RELEASE"
     jBCryptVersion = "0.4"
@@ -68,10 +68,10 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    implementation "org.testcontainers:postgresql:${testContainersVersion}" // testImpl is not sufficient
+    testImplementation "org.testcontainers:postgresql:${testContainersVersion}"
+    testImplementation "org.testcontainers:junit-jupiter:${testContainersVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
-
 //    testImplementation "com.h2database:h2:${h2Version}"
 
     // logging dependencies

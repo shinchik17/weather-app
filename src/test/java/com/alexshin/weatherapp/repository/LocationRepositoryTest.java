@@ -4,7 +4,7 @@ package com.alexshin.weatherapp.repository;
 import com.alexshin.weatherapp.model.entity.Location;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
-import com.alexshin.weatherapp.util.HibernateTestUtil;
+import com.alexshin.weatherapp.util.HibernateUtil;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ public class LocationRepositoryTest {
 
     @BeforeEach
     void setup() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
+        sessionFactory = HibernateUtil.getSessionFactory();
         locationRepository = new LocationRepository(sessionFactory);
 
 

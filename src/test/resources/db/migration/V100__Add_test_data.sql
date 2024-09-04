@@ -1,6 +1,7 @@
 INSERT INTO users (login, password)
 VALUES ('test_username1', 'test_pass1'),
-       ('test_username2', 'test_pass2');
+       ('test_username2', 'test_pass2'),
+       ('test_username3', 'test_pass3');
 
 INSERT INTO locations (name, user_id, latitude, longitude)
 VALUES ('test_loc_name1', 1, 0.1, 0.2),

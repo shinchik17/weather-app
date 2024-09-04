@@ -3,11 +3,14 @@ package com.alexshin.weatherapp;
 
 import com.alexshin.weatherapp.model.entity.Location;
 import com.alexshin.weatherapp.model.entity.User;
+import com.alexshin.weatherapp.util.EncryptionUtil;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 
 public class Main {
@@ -60,14 +63,21 @@ public class Main {
 //        var reg = RegistrationService.getInstance();
 //        var auth = AuthorizationService.getInstance();
 //
-//        String pass1 = "pass1";
-//
-//        String hash1 =  EncryptUtil.hashPassword(pass1);
-//        String hash2 =  EncryptUtil.hashPassword(pass1);
+        String pass1 = "pass1";
+
+
+
+        String hash1 =  EncryptionUtil.hashPassword(pass1);
+        String hash2 =  EncryptionUtil.hashPassword(pass1);
+        String salt1 = BCrypt.gensalt();
+        String salt2 = BCrypt.gensalt(10);
 //
 //        System.out.println(hash1.equals(hash2));
-        var a = LocalDateTime.parse("2001-09-11T00:00");
-        System.out.println(a);
+//        var a = LocalDateTime.parse("2001-09-11T00:00");
+        System.out.println(salt1);
+        System.out.println(salt2);
+        System.out.println(System.getenv("BCRYPT_SALT"));
+        System.out.println(System.getenv("aHTTP_PROXY"));
 
     }
 

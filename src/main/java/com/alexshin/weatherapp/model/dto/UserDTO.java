@@ -2,15 +2,13 @@ package com.alexshin.weatherapp.model.dto;
 
 
 import com.alexshin.weatherapp.exception.parsing.PasswordsDoNotMatchException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public final class UserDTO {
     Long id;
     String login;

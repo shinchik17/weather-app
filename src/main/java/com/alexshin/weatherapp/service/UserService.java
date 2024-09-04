@@ -1,11 +1,11 @@
 package com.alexshin.weatherapp.service;
 
 
-import com.alexshin.weatherapp.model.Mapper;
-import com.alexshin.weatherapp.model.dto.UserSessionDTO;
-import com.alexshin.weatherapp.model.entity.User;
+import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
 import com.alexshin.weatherapp.exception.service.SuchUserExistsException;
+import com.alexshin.weatherapp.model.Mapper;
+import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import jakarta.persistence.NoResultException;
@@ -17,7 +17,6 @@ import java.util.Optional;
 public class UserService {
     private static final UserService INSTANCE = new UserService();
     private final UserRepository userRepository = new UserRepository(HibernateUtil.getSessionFactory());
-    private final Mapper mapper = new Mapper();
 
     private UserService() {
     }
@@ -30,8 +29,10 @@ public class UserService {
     public void save(User user) {
         try {
             userRepository.save(user);
-        } catch (ConstraintViolationException e) {
-            throw new SuchUserExistsException("User with login %s is already registered.");
+        } catch (BaseRepositoryException e) {
+            if (e.getCause() instanceof ConstraintViolationException) {
+                throw new SuchUserExistsException("User with login %s is already registered.");
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public final class LocationDTO {
     Long id;
     String name;

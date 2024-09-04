@@ -12,15 +12,14 @@ import java.util.Map;
 import java.util.Properties;
 
 
-
-public final class HibernateTestUtil {
+public final class HibernateUtil {
 
     private static final Configuration configuration;
 
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
 
-    private HibernateTestUtil(){
-        throw new UnsupportedOperationException("HibernateTestUtil cannot be instantiated");
+    private HibernateUtil() {
+        throw new UnsupportedOperationException("HibernateUtil cannot be instantiated");
     }
 
 
@@ -62,7 +61,7 @@ public final class HibernateTestUtil {
     }
 
 
-    public static SessionFactory buildSessionFactory() {
+    public static SessionFactory getSessionFactory() {
         try {
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {

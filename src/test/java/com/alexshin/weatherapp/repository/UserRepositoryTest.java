@@ -1,15 +1,16 @@
 package com.alexshin.weatherapp.repository;
 
 
-import com.alexshin.weatherapp.model.entity.User;
+import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
-import com.alexshin.weatherapp.util.HibernateTestUtil;
+import com.alexshin.weatherapp.model.entity.User;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-
+@Testcontainers
 public class UserRepositoryTest {
     SessionFactory sessionFactory;
     UserRepository userRepo;
@@ -25,7 +26,7 @@ public class UserRepositoryTest {
 
     @BeforeEach
     void setup() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
+        sessionFactory = HibernateUtil.getSessionFactory();
         userRepo = new UserRepository(sessionFactory);
 
         transientUser = User.builder()
@@ -99,22 +100,22 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void findByLogin_ifExists(){
+    void findByLogin_ifExists() {
         Assertions.assertTrue(userRepo.findByLogin(PERSISTENT_USER_LOGIN).isPresent());
     }
 
     @Test
-    void findByLogin_ifNotExists(){
+    void findByLogin_ifNotExists() {
         Assertions.assertTrue(userRepo.findByLogin(PERSISTENT_USER_LOGIN).isPresent());
     }
 
     @Test
-    void findBySessionId_ifExists(){
+    void findBySessionId_ifExists() {
         Assertions.assertTrue(userRepo.findBySessionId(PERSISTENT_SESSION_ID).isPresent());
     }
 
     @Test
-    void findBySessionId_ifNotExists(){
+    void findBySessionId_ifNotExists() {
         Assertions.assertTrue(userRepo.findBySessionId(NONEXISTENT_SESSION_ID).isEmpty());
     }
 

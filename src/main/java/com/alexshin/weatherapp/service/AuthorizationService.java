@@ -12,6 +12,7 @@ import com.alexshin.weatherapp.model.entity.UserSession;
 import jakarta.persistence.NoResultException;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static com.alexshin.weatherapp.util.EncryptionUtil.passwordMatches;
 
@@ -32,20 +33,25 @@ public class AuthorizationService {
     public UserSessionDTO logIn(UserDTO userDTO) {
 
         User user;
+        UserSession userSession;
         try {
             user = userService.findByLogin(userDTO.getLogin()).orElseThrow();
+
+            if (!passwordMatches(userDTO.getPassword(), user.getPassword())) {
+                throw new IncorrectPasswordException("Incorrect password");
+            }
+
         } catch (NoResultException | NoSuchElementException e) {
             throw new NoSuchUserException("No user with login '%s'.".formatted(userDTO.getLogin()));
         }
 
-        if (!passwordMatches(userDTO.getPassword(), user.getPassword())) {
-            throw new IncorrectPasswordException("Incorrect password");
+        try {
+            userSession = userSessionService.findByUserLogin(user.getLogin());
+        } catch (NoSuchUserSessionException e) {
+            userSession = userSessionService.createSession(user);
         }
 
-        UserSession userSession = userSessionService.createSession(user);
-        UserSessionDTO session = mapper.toDto(userSession);
-
-        return session;
+        return mapper.toDto(userSession);
     }
 
     public void logOut(String login) {
