@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GeocodingResponseDTO {
+public class WeatherApiResponseDTO {
 
     @JsonProperty("name")
     private String cityName;
@@ -55,10 +55,10 @@ public class GeocodingResponseDTO {
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Main {
-        private int temp;
-        private int feelsLike;
-        private int tempMin;
-        private int tempMax;
+        private BigDecimal temp;
+        @JsonProperty("feels_like") private BigDecimal feelsLike;
+        @JsonProperty("temp_min") private BigDecimal tempMin;
+        @JsonProperty("temp_max") private BigDecimal tempMax;
         private int pressure;
         private int humidity;
     }
