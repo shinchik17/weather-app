@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!--    <link href="../../resources/css/bootstrap.min.css" rel="stylesheet">-->
-    <!--    <link href="../../resources/css/style.css" rel="stylesheet">-->
+<!--    <link href="../../resources/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <link href="../../resources/css/style.css" rel="stylesheet">-->
     <link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/resources/css/style.css}" rel="stylesheet">
     <title>Home page</title>
@@ -27,8 +27,9 @@
                 </li>
             </ul>
             <div class="container-fluid">
-                <form th:action="@{/search-results}" method="get" class="d-flex justify-content-center">
-                    <input class="form-control me-2" type="search" name="location-name" placeholder="Search for locations"
+                <form th:action="@{/search-results}" th:method="get" class="d-flex justify-content-center">
+                    <input class="form-control me-2" type="search" name="location-name"
+                           placeholder="Search for locations"
                            aria-label="Search">
                     <button class="btn btn-outline-primary" type="submit">Search</button>
                 </form>
@@ -52,24 +53,29 @@
     <div class="col" th:each="location : ${foundLocations}">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title mb-4 d-flex justify-content-between" th:text="${location.name}">
-                    Location name <a class="btn-close d-inline" role="button"></a>
+                <h5 class="card-title mb-4 d-flex justify-content-between">
+                    <span th:text="${location.cityName} + ', ' + ${location.sys.country}">Location name</span>
+
+                    <a class="btn-close d-inline" role="button"></a>
                 </h5>
 
+                <p>
+                    Country: <span class="country" th:text="${location.sys.country}"></span>
+                </p>
                 <p><i class="fas fa-thermometer-half"></i>
-                    Temperature: <span class="temperature" th:text="${location.temperature}"></span> °C
+                    Temperature: <span class="temperature" th:text="${location.main.temp.toString()}"></span> &degC
                 </p>
                 <p><i class="fas fa-temperature-low"></i>
-                    Feels Like: <span class="feelsLike" th:text="${location.feelsLike}"></span> °C
+                    Feels Like: <span class="feelsLike" th:text="${location.main.feelsLike.toString()}"></span> &degC
                 </p>
                 <p><i class="fas fa-tachometer-alt"></i>
-                    Pressure: <span th:text="${location.pressure}"></span> hPa
+                    Pressure: <span th:text="${location.main.pressure}"></span> hPa
                 </p>
                 <p><i class="fas fa-tint"></i>
-                    Humidity: <span th:text="${location.humidity}"></span> %
+                    Humidity: <span th:text="${location.main.humidity}"></span> %
                 </p>
                 <p><i class="fas fa-wind"></i>
-                    Wind Speed: <span th:text="${location.windSpeed}"></span> m/s
+                    Wind Speed: <span th:text="${location.wind.speed}"></span> m/s
                 </p>
             </div>
         </div>

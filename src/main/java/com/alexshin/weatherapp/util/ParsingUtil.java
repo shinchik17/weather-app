@@ -1,9 +1,12 @@
 package com.alexshin.weatherapp.util;
 
 
+import com.alexshin.weatherapp.exception.parsing.IllegalCoordinatesFormatException;
 import com.alexshin.weatherapp.exception.parsing.IllegalLocationNameFormatException;
 import com.alexshin.weatherapp.exception.parsing.IllegalLoginFormatException;
 import com.alexshin.weatherapp.exception.parsing.IllegalPasswordFormatException;
+
+import java.math.BigDecimal;
 
 import static com.alexshin.weatherapp.util.ValidationUtil.*;
 
@@ -38,6 +41,14 @@ public class ParsingUtil {
             throw new IllegalLocationNameFormatException();
         }
 
+    }
+
+    public static BigDecimal parseCoord(String coord){
+        try {
+            return new BigDecimal(coord);
+        } catch (NumberFormatException e){
+            throw new IllegalCoordinatesFormatException();
+        }
     }
 
 

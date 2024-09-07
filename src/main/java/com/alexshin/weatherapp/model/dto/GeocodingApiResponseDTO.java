@@ -1,6 +1,7 @@
 package com.alexshin.weatherapp.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,9 +17,11 @@ public class GeocodingApiResponseDTO {
 
     private String country;
 
-    private BigDecimal lon;
+    @JsonProperty("lon")
+    private BigDecimal longitude;
 
-    private BigDecimal lat;
+    @JsonProperty("lat")
+    private BigDecimal latitude;
 
 
 }

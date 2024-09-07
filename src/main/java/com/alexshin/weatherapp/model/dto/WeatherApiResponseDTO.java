@@ -32,6 +32,8 @@ public class WeatherApiResponseDTO {
 
     private Clouds clouds;
 
+    private Sys sys;
+
 
     @Getter
     @Setter
@@ -77,6 +79,16 @@ public class WeatherApiResponseDTO {
     public static class Clouds {
         int all;
     }
+
+    @Getter
+    @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Sys {
+        String country;
+    }
+
+
+
 
 
 

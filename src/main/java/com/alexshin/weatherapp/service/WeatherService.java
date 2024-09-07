@@ -1,6 +1,7 @@
 package com.alexshin.weatherapp.service;
 
 import com.alexshin.weatherapp.exception.service.ApiKeyNotFoundException;
+import com.alexshin.weatherapp.exception.service.weatherapi.ApiRequestException;
 import com.alexshin.weatherapp.model.dto.GeocodingApiResponseDTO;
 import com.alexshin.weatherapp.model.dto.WeatherApiResponseDTO;
 import com.alexshin.weatherapp.util.PropertiesUtil;
@@ -36,39 +37,54 @@ public class WeatherService {
         }
     }
 
-    // TODO: may be a list of locations!!!
-    public WeatherApiResponseDTO getWeatherByLocationName(String name) throws URISyntaxException, IOException, InterruptedException {
+    // TODO: there might be a list of locations?
+    public WeatherApiResponseDTO getWeatherByLocationName(String name) {
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(buildWeatherByNameRequestUrl(name))
-                .build();
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(buildWeatherByNameRequestUrl(name))
+                    .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return objectMapper.readValue(response.body(), WeatherApiResponseDTO.class);
-
-    }
-
-
-    public WeatherApiResponseDTO getWeatherByLocationCoords(BigDecimal latitude, BigDecimal longitude) throws URISyntaxException, IOException, InterruptedException {
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(buildWeatherByCoordsRequestUrl(latitude, longitude))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return objectMapper.readValue(response.body(), WeatherApiResponseDTO.class);
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return objectMapper.readValue(response.body(), WeatherApiResponseDTO.class);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new ApiRequestException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+        }
 
     }
 
-    public List<GeocodingApiResponseDTO> searchLocationByName(String name) throws URISyntaxException, IOException, InterruptedException {
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(buildGeocodingRequest(name))
-                .build();
+    public WeatherApiResponseDTO getWeatherByLocationCoords(BigDecimal latitude, BigDecimal longitude) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(buildWeatherByCoordsRequestUrl(latitude, longitude))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return objectMapper.readValue(response.body(), WeatherApiResponseDTO.class);
+
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new ApiRequestException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+        }
 
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return objectMapper.readValue(response.body(), new TypeReference<List<GeocodingApiResponseDTO>>() {});
+    }
+
+    public List<GeocodingApiResponseDTO> searchLocationsByName(String name) {
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(buildGeocodingRequest(name))
+                    .build();
+
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return objectMapper.readValue(response.body(), new TypeReference<>() {
+            });
+
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new ApiRequestException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+        }
 
     }
 

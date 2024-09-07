@@ -33,6 +33,8 @@ public class UserService {
             if (e.getCause() instanceof ConstraintViolationException) {
                 throw new SuchUserExistsException("User with login %s is already registered.");
             }
+
+            throw e;
         }
     }
 
