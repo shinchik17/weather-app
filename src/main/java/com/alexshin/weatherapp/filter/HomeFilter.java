@@ -27,18 +27,18 @@ public class HomeFilter extends ProtectedUrlFilter {
         Optional<String> optSessionId = CookieUtil.extractSessionCookie(req);
 
         if (optSessionId.isEmpty()) {
-            logger.info("HomeFilter -> Session is empty".formatted());
+            logger.info("%s -> Session is empty".formatted(getFilterName()));
         } else {
             Optional<Object> optUser = Optional.ofNullable(req.getAttribute("user"));
             if (optUser.isEmpty()) {
-                logger.info("HomeFilter -> Session presents, but user is empty");
+                logger.info("%s -> Session presents, but user is empty".formatted(getFilterName()));
                 UserDTO user = authService.findUserBySessionId(optSessionId.get());
                 req.setAttribute("user", user);
             }
         }
 
         chain.doFilter(req, resp);
-        logger.info("HomeFilter -> Process to next filter");
+        logger.info("%s -> Process to next filter".formatted(getFilterName()));
     }
 
 }
