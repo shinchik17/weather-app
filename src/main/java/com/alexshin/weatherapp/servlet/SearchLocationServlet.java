@@ -41,7 +41,11 @@ public class SearchLocationServlet extends BaseServlet {
 
             List<WeatherApiResponseDTO> locsWithWeather = locationsList.stream()
                     .map(
-                            loc -> weatherService.getWeatherByLocationCoords(loc.getLatitude(), loc.getLongitude())
+                            loc -> {
+                                var newLoc = weatherService.getWeatherByLocationCoords(loc.getLatitude(), loc.getLongitude());
+                                newLoc.setCityName(loc.getName());
+                                return newLoc;
+                            }
                     )
                     .toList();
 

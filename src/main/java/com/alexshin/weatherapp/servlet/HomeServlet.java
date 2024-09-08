@@ -33,7 +33,7 @@ public class HomeServlet extends BaseServlet {
 
             List<WeatherApiResponseDTO> locsWithWeather = locationsList.stream()
                     .map(
-                            loc -> weatherService.getWeatherByLocationCoords(loc.getLatitude(), loc.getLongitude())
+                            loc -> weatherService.getWeatherByLocationName(loc.getName())
                     )
                     .toList();
 
