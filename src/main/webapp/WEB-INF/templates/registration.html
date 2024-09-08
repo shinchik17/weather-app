@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    <link href="../../resources/css/bootstrap.min.css" rel="stylesheet">-->
-    <!--    <link href="../../resources/css/style.css" rel="stylesheet">-->
-    <link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/resources/css/style.css}" rel="stylesheet">
-    <title>Registration</title>
-</head>
+<head th:replace="~{/common/head :: head ('Registration')}"></head>
+
 <body>
 
 <div class="container">
