@@ -2,13 +2,11 @@ package com.alexshin.weatherapp.service;
 
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.exception.service.SuchLocationExistsException;
-import com.alexshin.weatherapp.model.Mapper;
 import com.alexshin.weatherapp.model.dto.LocationDTO;
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.model.entity.Location;
 import com.alexshin.weatherapp.repository.LocationRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -33,12 +31,10 @@ public class LocationService {
     }
 
 
-    public List<LocationDTO> findByUser(UserDTO user){
-        return mapper.map(locationRepository.findByUserId(user.getId()),  new TypeToken<List<LocationDTO>>() {}.getType());
+    public List<LocationDTO> findByUser(UserDTO user) {
+        return mapper.map(locationRepository.findByUserId(user.getId()), new TypeToken<List<LocationDTO>>() {
+        }.getType());
     }
-
-
-
 
 
 }

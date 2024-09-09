@@ -4,7 +4,6 @@ package com.alexshin.weatherapp.service;
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
 import com.alexshin.weatherapp.exception.service.SuchUserExistsException;
-import com.alexshin.weatherapp.model.Mapper;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;

@@ -1,18 +1,17 @@
 package com.alexshin.weatherapp.service;
 
 
-import com.alexshin.weatherapp.model.Mapper;
-import com.alexshin.weatherapp.model.dto.UserDTO;
-import com.alexshin.weatherapp.model.dto.UserSessionDTO;
-import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.exception.service.IncorrectPasswordException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
+import com.alexshin.weatherapp.model.dto.UserDTO;
+import com.alexshin.weatherapp.model.dto.UserSessionDTO;
+import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.model.entity.UserSession;
 import jakarta.persistence.NoResultException;
+import org.modelmapper.ModelMapper;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static com.alexshin.weatherapp.util.EncryptionUtil.passwordMatches;
 
@@ -20,7 +19,7 @@ public class AuthorizationService {
     private static final AuthorizationService INSTANCE = new AuthorizationService();
     private final UserService userService = UserService.getInstance();
     private final UserSessionService userSessionService = UserSessionService.getInstance();
-    private final Mapper mapper = new Mapper();
+    private final ModelMapper mapper = new ModelMapper();
 
     private AuthorizationService() {
     }
@@ -51,7 +50,7 @@ public class AuthorizationService {
             userSession = userSessionService.createSession(user);
         }
 
-        return mapper.toDto(userSession);
+        return mapper.map(userSession, UserSessionDTO.class);
     }
 
     public void logOut(String login) {
@@ -64,7 +63,7 @@ public class AuthorizationService {
         try {
             userSessionService.updateUserSessionState(sessionId);
             User user = userService.findUserBySessionId(sessionId);
-            return mapper.toDto(user);
+            return mapper.map(user, UserDTO.class);
 
         } catch (NoSuchUserException e) {
             throw new NoSuchUserException("No user found for given SessionId");
@@ -73,8 +72,6 @@ public class AuthorizationService {
         }
 
     }
-
-
 
 
 }
