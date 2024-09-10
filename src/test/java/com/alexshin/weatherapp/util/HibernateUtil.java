@@ -4,6 +4,7 @@ package com.alexshin.weatherapp.util;
 import com.alexshin.weatherapp.model.entity.Location;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.model.entity.UserSession;
+import lombok.Getter;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -14,7 +15,11 @@ import java.util.Properties;
 
 public final class HibernateUtil {
 
+    @Getter
     private static final Configuration configuration;
+
+    @Getter
+    private static final SessionFactory sessionFactory;
 
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
 
@@ -28,6 +33,11 @@ public final class HibernateUtil {
             // TODO: remove duplicate code of buildConfiguration()
             postgres.start();
             configuration = buildConfiguration(PropertiesUtil.getAllProperties());
+            sessionFactory = configuration.buildSessionFactory();
+
+            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
+                MigrationUtil.runFlywayMigration(configuration);
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -61,18 +71,18 @@ public final class HibernateUtil {
     }
 
 
-    public static SessionFactory getSessionFactory() {
-        try {
-            SessionFactory sessionFactory = configuration.buildSessionFactory();
-            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
-                MigrationUtil.cleanDS(configuration);
-                MigrationUtil.runFlywayMigration(configuration);
-            }
-            return sessionFactory;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static SessionFactory getSessionFactory() {
+//        try {
+//            SessionFactory sessionFactory = configuration.buildSessionFactory();
+//            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
+//                MigrationUtil.cleanDS(configuration);
+//                MigrationUtil.runFlywayMigration(configuration);
+//            }
+//            return sessionFactory;
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 
 }

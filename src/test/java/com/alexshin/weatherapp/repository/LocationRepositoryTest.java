@@ -5,7 +5,9 @@ import com.alexshin.weatherapp.model.entity.Location;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.util.HibernateUtil;
+import com.alexshin.weatherapp.util.MigrationUtil;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +19,6 @@ public class LocationRepositoryTest {
     SessionFactory sessionFactory;
     LocationRepository locationRepository;
     Location transientLocation;
-    Location transientLocation2;
 
     User PERSISTENT_USER = User.builder()
             .id(1L)
@@ -45,6 +46,12 @@ public class LocationRepositoryTest {
                 .latitude(PERSISTENT_LONGITUDE)
                 .build();
 
+        MigrationUtil.runFlywayMigration(HibernateUtil.getConfiguration());
+    }
+
+    @AfterEach
+    void clean(){
+        MigrationUtil.cleanDS(HibernateUtil.getConfiguration());
     }
 
     @Test()

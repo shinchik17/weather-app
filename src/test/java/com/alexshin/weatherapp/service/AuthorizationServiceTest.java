@@ -4,22 +4,17 @@ import com.alexshin.weatherapp.exception.service.NoSuchUserException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
 import com.alexshin.weatherapp.exception.service.UserSessionExpiredException;
 import com.alexshin.weatherapp.model.dto.UserDTO;
-import com.alexshin.weatherapp.repository.UserRepository;
-import com.alexshin.weatherapp.repository.UserSessionRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
+import com.alexshin.weatherapp.util.MigrationUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-
 class AuthorizationServiceTest {
 
-    // TODO: реализовать все тесты с помощью рефлексии в BeforeEach, закоммитить, потом уже пробовать переходить
-    //  на перезапуск контейнера в BeforeEach
-    UserService userService = UserService.getInstance();
     UserSessionService userSessionService = UserSessionService.getInstance();
-    AuthorizationService authService;
+    AuthorizationService authService = AuthorizationService.getInstance();
 
     String EXPIRED_SESSION_ID = "test_session_id2";
 
@@ -39,16 +34,13 @@ class AuthorizationServiceTest {
             .build();
 
     @BeforeEach
-    void setup() throws NoSuchFieldException, IllegalAccessException {
-        Field field = userService.getClass().getDeclaredField("userRepository");
-        field.setAccessible(true);
-        field.set(userService, new UserRepository(HibernateUtil.getSessionFactory()));
+    void setup() {
+        MigrationUtil.runFlywayMigration(HibernateUtil.getConfiguration());
+    }
 
-        Field field1 = userSessionService.getClass().getDeclaredField("userSessionRepository");
-        field1.setAccessible(true);
-        field1.set(userSessionService, new UserSessionRepository(HibernateUtil.getSessionFactory()));
-
-        authService = AuthorizationService.getInstance();
+    @AfterEach
+    void clean() {
+        MigrationUtil.cleanDS(HibernateUtil.getConfiguration());
     }
 
 
@@ -66,7 +58,7 @@ class AuthorizationServiceTest {
     }
 
     @Test
-    void logIn_whenSessionExpired_thenThrow(){
+    void logIn_whenSessionExpired_thenThrow() {
         Assertions.assertThrows(UserSessionExpiredException.class, () -> authService.findUserBySessionId(EXPIRED_SESSION_ID));
     }
 

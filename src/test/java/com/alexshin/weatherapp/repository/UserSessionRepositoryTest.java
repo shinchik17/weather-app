@@ -1,11 +1,13 @@
 package com.alexshin.weatherapp.repository;
 
 
+import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.model.entity.UserSession;
-import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.util.HibernateUtil;
+import com.alexshin.weatherapp.util.MigrationUtil;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,12 @@ public class UserSessionRepositoryTest {
                 .expiresAt(PERSISTENT_EXPIRES_AT)
                 .build();
 
+        MigrationUtil.runFlywayMigration(HibernateUtil.getConfiguration());
+    }
+
+    @AfterEach
+    void clean() {
+        MigrationUtil.cleanDS(HibernateUtil.getConfiguration());
     }
 
     @Test()
