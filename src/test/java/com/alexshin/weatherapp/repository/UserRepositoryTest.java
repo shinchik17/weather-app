@@ -96,6 +96,7 @@ public class UserRepositoryTest {
     void findAll_ifNoAnyExist() {
         userRepo.delete(1L);
         userRepo.delete(2L);
+        userRepo.delete(3L);
         Assertions.assertTrue(userRepo.findAll().isEmpty());
     }
 
