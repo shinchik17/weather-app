@@ -21,6 +21,7 @@ import java.util.List;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 public class WeatherService {
+    private static final WeatherService INSTANCE = new WeatherService();
     private final String API_KEY;
     private static String protocol = "https";
     private static final String SERVICE_URI = "api.openweathermap.org";
@@ -31,11 +32,15 @@ public class WeatherService {
     private HttpClient client = createHttpClient();
     private static final int locNumLimit = Integer.parseInt(PropertiesUtil.getProperty("location.search.limit"));
 
-    public WeatherService() {
+    private WeatherService() {
         API_KEY = System.getenv("WEATHER_API_KEY");
         if (API_KEY == null) {
             throw new ApiKeyNotFoundException("OpenWeather API key not found in environment variables");
         }
+    }
+
+    public static WeatherService getInstance(){
+        return INSTANCE;
     }
 
 

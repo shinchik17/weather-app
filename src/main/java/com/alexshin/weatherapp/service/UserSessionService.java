@@ -1,13 +1,11 @@
 package com.alexshin.weatherapp.service;
 
 
-import com.alexshin.weatherapp.exception.service.NoSuchUserException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
+import com.alexshin.weatherapp.exception.service.UserSessionExpiredException;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.model.entity.UserSession;
-import com.alexshin.weatherapp.exception.service.UserSessionExpiredException;
 import com.alexshin.weatherapp.repository.UserSessionRepository;
-//import com.alexshin.weatherapp.util.HibernateTestUtil;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.util.PropertiesUtil;
 import jakarta.persistence.NoResultException;
@@ -53,7 +51,7 @@ public class UserSessionService {
     public void updateUserSessionState(String id) {
         UserSession userSession = userSessionRepository.findById(id).orElseThrow();
 
-        if (!isValidSession(userSession)){
+        if (!isValidSession(userSession)) {
             userSessionRepository.delete(id);
             throw new UserSessionExpiredException("Session with given id has expired");
         }
@@ -76,12 +74,12 @@ public class UserSessionService {
     }
 
 
-    private boolean isValidSession(UserSession userSession){
+    private boolean isValidSession(UserSession userSession) {
         return userSession.getExpiresAt().isAfter(LocalDateTime.now());
     }
 
 
-    private LocalDateTime getDefaultLifespan(){
+    private LocalDateTime getDefaultLifespan() {
         long hoursLifespan = Long.parseLong(PropertiesUtil.getProperty("session.hours_lifespan"));
         return LocalDateTime.now().plusHours(hoursLifespan);
     }

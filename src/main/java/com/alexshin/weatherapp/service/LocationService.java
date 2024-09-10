@@ -14,8 +14,17 @@ import org.modelmapper.TypeToken;
 import java.util.List;
 
 public class LocationService {
+    private static final LocationService INSTANCE = new LocationService();
     private final LocationRepository locationRepository = new LocationRepository(HibernateUtil.getSessionFactory());
     private final ModelMapper mapper = new ModelMapper();
+
+
+    private LocationService() {
+    }
+
+    public static LocationService getInstance() {
+        return INSTANCE;
+    }
 
 
     public void saveLocation(LocationDTO location) {

@@ -4,7 +4,6 @@ import com.alexshin.weatherapp.exception.service.AuthenticationException;
 import com.alexshin.weatherapp.model.dto.LocationDTO;
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.model.dto.WeatherApiResponseDTO;
-import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.service.LocationService;
 import com.alexshin.weatherapp.service.WeatherService;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,8 +15,9 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "", name = "HomeServlet")
 public class HomeServlet extends BaseServlet {
-    private final LocationService locService = new LocationService();
-    private final WeatherService weatherService = new WeatherService();
+    private final LocationService locService = LocationService.getInstance();
+    private final WeatherService weatherService = WeatherService.getInstance();
+
     // TODO implement deleting location?
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -32,9 +32,7 @@ public class HomeServlet extends BaseServlet {
             List<LocationDTO> locationsList = locService.findByUser(user);
 
             List<WeatherApiResponseDTO> locsWithWeather = locationsList.stream()
-                    .map(
-                            loc -> weatherService.getWeatherByLocationName(loc.getName())
-                    )
+                    .map(loc -> weatherService.getWeatherByLocationName(loc.getName()))
                     .toList();
 
 
@@ -43,7 +41,7 @@ public class HomeServlet extends BaseServlet {
 
         } catch (AuthenticationException e) {
             processTemplate("home-unauthorized", req, resp);
-        } catch (ClassCastException e){
+        } catch (ClassCastException e) {
             Object user = req.getAttribute("user");
         }
 
