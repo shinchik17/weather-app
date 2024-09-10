@@ -1,7 +1,7 @@
 package com.alexshin.weatherapp.service;
 
 import com.alexshin.weatherapp.exception.service.ApiKeyNotFoundException;
-import com.alexshin.weatherapp.exception.service.weatherapi.ApiRequestException;
+import com.alexshin.weatherapp.exception.service.weatherapi.WeatherApiCallException;
 import com.alexshin.weatherapp.model.dto.GeocodingApiResponseDTO;
 import com.alexshin.weatherapp.model.dto.WeatherApiResponseDTO;
 import com.alexshin.weatherapp.util.PropertiesUtil;
@@ -9,7 +9,6 @@ import com.alexshin.weatherapp.util.ProxyUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,6 +18,8 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
+
 public class WeatherService {
     private final String API_KEY;
     private static String protocol = "https";
@@ -27,7 +28,7 @@ public class WeatherService {
     private static final String WEATHER_BY_COORDS_REQUEST = "/data/2.5/weather?lat=%s&lon=%s&appid=%s&units=metric";
     private static final String GEOCODING_REQUEST = "/geo/1.0/direct?q=%s&limit=%d&appid=%s";
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final HttpClient client = createHttpClient();
+    private HttpClient client = createHttpClient();
     private static final int locNumLimit = Integer.parseInt(PropertiesUtil.getProperty("location.search.limit"));
 
     public WeatherService() {
@@ -37,18 +38,43 @@ public class WeatherService {
         }
     }
 
-    // TODO: there might be a list of locations?
+
+    public List<GeocodingApiResponseDTO> searchLocationsByName(String name) {
+
+        try {
+            HttpRequest request = buildGeocodingRequest(name);
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != SC_OK) {
+                throw new WeatherApiCallException("Response status code %d".formatted(response.statusCode()));
+            }
+
+            return objectMapper.readValue(response.body(), new TypeReference<>() {
+            });
+
+        } catch (Exception e) {
+            throw new WeatherApiCallException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+        }
+
+    }
+
+
     public WeatherApiResponseDTO getWeatherByLocationName(String name) {
 
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(buildWeatherByNameRequestUrl(name))
-                    .build();
+            HttpRequest request = buildWeatherByNameRequest(name);
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != SC_OK) {
+                throw new WeatherApiCallException("Response status code %d".formatted(response.statusCode()));
+            }
+
             return objectMapper.readValue(response.body(), WeatherApiResponseDTO.class);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new ApiRequestException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+
+        } catch (Exception e) {
+            throw new WeatherApiCallException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
         }
 
     }
@@ -56,56 +82,62 @@ public class WeatherService {
 
     public WeatherApiResponseDTO getWeatherByLocationCoords(BigDecimal latitude, BigDecimal longitude) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(buildWeatherByCoordsRequestUrl(latitude, longitude))
-                    .build();
+            HttpRequest request = buildWeatherByCoordsRequest(latitude, longitude);
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != SC_OK) {
+                throw new WeatherApiCallException("Response status code %d".formatted(response.statusCode()));
+            }
             return objectMapper.readValue(response.body(), WeatherApiResponseDTO.class);
 
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new ApiRequestException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
-        }
-
-
-    }
-
-    public List<GeocodingApiResponseDTO> searchLocationsByName(String name) {
-
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(buildGeocodingRequest(name))
-                    .build();
-
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return objectMapper.readValue(response.body(), new TypeReference<>() {
-            });
-
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new ApiRequestException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+        } catch (Exception e) {
+            throw new WeatherApiCallException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
         }
 
     }
 
 
-    private URI buildGeocodingRequest(String name) throws URISyntaxException {
-        return new URI(protocol + "://" +
+    public List<WeatherApiResponseDTO> getWeatherForLocationsList(List<GeocodingApiResponseDTO> locationsList) {
+        return locationsList.stream()
+                .map(
+                        loc -> {
+                            WeatherApiResponseDTO locWithWeather = getWeatherByLocationCoords(loc.getLatitude(), loc.getLongitude());
+                            locWithWeather.setCityName(loc.getName());
+                            return locWithWeather;
+                        }
+                )
+                .toList();
+    }
+
+    private HttpRequest buildGeocodingRequest(String name) throws URISyntaxException {
+        URI uri = new URI(protocol + "://" +
                 SERVICE_URI +
                 GEOCODING_REQUEST.formatted(name, locNumLimit, API_KEY));
+
+        return HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
     }
 
-    private URI buildWeatherByCoordsRequestUrl(BigDecimal latitude, BigDecimal longitude) throws URISyntaxException {
-        return new URI(protocol + "://" +
+    private HttpRequest buildWeatherByCoordsRequest(BigDecimal latitude, BigDecimal longitude) throws URISyntaxException {
+        URI uri = new URI(protocol + "://" +
                 SERVICE_URI +
                 WEATHER_BY_COORDS_REQUEST.formatted(latitude, longitude, API_KEY));
+
+        return HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
     }
 
-
-    private URI buildWeatherByNameRequestUrl(String name) throws URISyntaxException {
-        return new URI(protocol + "://" +
+    private HttpRequest buildWeatherByNameRequest(String name) throws URISyntaxException {
+        URI uri = new URI(protocol + "://" +
                 SERVICE_URI +
                 WEATHER_BY_NAME_REQUEST.formatted(name, API_KEY));
+
+        return HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
     }
 
     private HttpClient createHttpClient() {
