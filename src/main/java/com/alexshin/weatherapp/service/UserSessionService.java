@@ -56,10 +56,6 @@ public class UserSessionService {
             throw new UserSessionExpiredException("Session with given id has expired");
         }
 
-        userSession.setExpiresAt(getDefaultLifespan());
-        userSessionRepository.update(userSession);
-
-
     }
 
 
