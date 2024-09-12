@@ -23,7 +23,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 public class WeatherService {
     private static final WeatherService INSTANCE = new WeatherService();
     private final String API_KEY;
-    private static String protocol = "https";
+    private static String protocol;
     private static final String SERVICE_URI = "api.openweathermap.org";
     private static final String WEATHER_BY_NAME_REQUEST = "/data/2.5/weather?q=%s&appid=%s&units=metric";
     private static final String WEATHER_BY_COORDS_REQUEST = "/data/2.5/weather?lat=%s&lon=%s&appid=%s&units=metric";
@@ -36,6 +36,10 @@ public class WeatherService {
         API_KEY = System.getenv("WEATHER_API_KEY");
         if (API_KEY == null) {
             throw new ApiKeyNotFoundException("OpenWeather API key not found in environment variables");
+        }
+
+        if (ProxyUtil.isProxyPresent()){
+            protocol = "http";
         }
     }
 
@@ -151,7 +155,6 @@ public class WeatherService {
 
         if (ProxyUtil.isProxyPresent()) {
             ProxyUtil.setProxy(clientBuilder);
-            protocol = "http";
         }
 
         return clientBuilder.build();
