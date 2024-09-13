@@ -23,7 +23,7 @@ public class Location implements BaseEntity<Long> {
     @NonNull
     private String name;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
