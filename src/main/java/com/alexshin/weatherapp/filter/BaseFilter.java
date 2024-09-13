@@ -17,7 +17,7 @@ import java.util.Set;
 @WebFilter(urlPatterns = "/", filterName = "BaseFilter")
 public class BaseFilter extends HttpFilter {
     protected final Set<String> ALLOWED_SERVLET_PATHS = new HashSet<>(Set.of(
-            "", "/registration", "/login", "/logout", "/search-results"
+            "", "/register", "/login", "/logout", "/search-results"
     ));
     private final Logger logger = LogManager.getLogger();
 

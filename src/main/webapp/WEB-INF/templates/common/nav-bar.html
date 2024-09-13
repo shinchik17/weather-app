@@ -18,10 +18,13 @@
                 </li>
             </ul>
             <div class="container-fluid">
+                <!-- TODO: add url-encoding -->
                 <form th:action="@{/search-results}" th:method="get" class="d-flex justify-content-center">
-                    <input class="form-control me-2" type="search" name="location-name"
+                    <input class="form-control me-2" type="search" name="location-name" required
                            placeholder="Search for locations"
-                           aria-label="Search">
+                           aria-label="Search"
+                           pattern="\S+"
+                           title="Location name should contain at least 1 character">
                     <button class="btn btn-outline-primary" type="submit">Search</button>
                 </form>
             </div>

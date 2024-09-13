@@ -45,5 +45,9 @@ public class LocationService {
         }.getType());
     }
 
+    public void deleteById(long id){
+        locationRepository.delete(id);
+    }
+
 
 }

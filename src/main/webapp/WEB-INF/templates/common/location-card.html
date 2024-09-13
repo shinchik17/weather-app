@@ -3,11 +3,15 @@
 
 <body>
 
-<div th:fragment="card (hasDelBtn, hasSelectBtn)" class="card h-100">
+<!-- extract location to th:object-->
+<div th:fragment="card (hasDelBtn, hasSelectBtn)" class="card h-100" th:with="appContext=@{/}">
     <div class="card-body">
         <h5 class="card-title mb-4 d-flex justify-content-between">
             <span th:text="${location.cityName} + ', ' + ${location.sys.country}">Location name</span>
-            <a th:if="hasDelBtn" class="btn-close d-inline" role="button"></a>
+            <a th:if="${hasDelBtn}" class="btn-close d-inline" role="button"
+               th:data-ctx="${appContext}" th:data-loc-id="${location.locationId}"
+               onclick="deleteLocation(this)"></a>
+
         </h5>
 
         <p><i class="fas fa-thermometer-half"></i>
@@ -26,7 +30,7 @@
             Wind Speed: <span th:text="${location.wind.speed}"></span> m/s
         </p>
 
-        <form th:if="hasSelectBtn" th:action="@{/search-results}" th:method="post">
+        <form th:if="${hasSelectBtn}" th:action="@{/search-results}" th:method="post">
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Select</button>
                 <input type="hidden" name="selected-loc-name" th:value="${location.cityName}">
@@ -37,5 +41,6 @@
     </div>
 </div>
 
+<script th:src="@{/resources/js/deleteLocation.js}"></script>
 </body>
 </html>

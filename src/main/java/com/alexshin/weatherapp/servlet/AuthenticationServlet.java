@@ -2,7 +2,7 @@ package com.alexshin.weatherapp.servlet;
 
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.model.dto.UserSessionDTO;
-import com.alexshin.weatherapp.service.AuthorizationService;
+import com.alexshin.weatherapp.service.AuthenticationService;
 import com.alexshin.weatherapp.util.CookieUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,8 +14,8 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
 
 @WebServlet("/login")
-public class AuthorizationServlet extends BaseServlet {
-    private final AuthorizationService authorizationService = AuthorizationService.getInstance();
+public class AuthenticationServlet extends BaseServlet {
+    private final AuthenticationService authenticationService = AuthenticationService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -30,7 +30,7 @@ public class AuthorizationServlet extends BaseServlet {
                     parsePassword(req.getParameter("password"))
             );
 
-            UserSessionDTO session = authorizationService.logIn(userDTO);
+            UserSessionDTO session = authenticationService.logIn(userDTO);
             CookieUtil.setSessionCookie(resp, session);
 
             resp.sendRedirect(rootPath);

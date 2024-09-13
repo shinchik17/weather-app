@@ -6,7 +6,13 @@
 
 <nav th:replace="~{/common/nav-bar :: navbar}"></nav>
 
-<div class="container row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+<div th:if="${error != null}" class="container">
+    <div class="row">
+        <h1 class="text-center display-3" th:text="${error}">Error text</h1>
+    </div>
+</div>
+
+<div th:if="${error == null}" class="container row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
     <div class="col" th:each="location : ${foundLocations}">
         <div th:replace="~{/common/location-card :: card (true, false)}"></div>
     </div>
@@ -14,5 +20,6 @@
 
 <!--<script src="../../resources/js/bootstrap.bundle.min.js"></script>-->
 <script th:src="@{/resources/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/resources/js/deleteLocation.js}"></script>
 </body>
 </html>

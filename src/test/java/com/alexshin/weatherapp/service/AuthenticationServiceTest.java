@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class AuthorizationServiceTest {
+class AuthenticationServiceTest {
 
     UserSessionService userSessionService = UserSessionService.getInstance();
-    AuthorizationService authService = AuthorizationService.getInstance();
+    AuthenticationService authService = AuthenticationService.getInstance();
 
     String EXPIRED_SESSION_ID = "test_session_id2";
 

@@ -1,7 +1,7 @@
 package com.alexshin.weatherapp.filter;
 
 import com.alexshin.weatherapp.model.dto.UserDTO;
-import com.alexshin.weatherapp.service.AuthorizationService;
+import com.alexshin.weatherapp.service.AuthenticationService;
 import com.alexshin.weatherapp.util.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @WebFilter(urlPatterns = {"/search-results", "/logout"}, filterName = "ProtectedUrlFilter")
 public class ProtectedUrlFilter extends BaseFilter {
     private final Logger logger = LogManager.getLogger();
-    private final AuthorizationService authService = AuthorizationService.getInstance();
+    private final AuthenticationService authService = AuthenticationService.getInstance();
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {

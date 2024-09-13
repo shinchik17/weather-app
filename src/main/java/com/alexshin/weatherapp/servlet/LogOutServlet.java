@@ -1,6 +1,6 @@
 package com.alexshin.weatherapp.servlet;
 
-import com.alexshin.weatherapp.service.AuthorizationService;
+import com.alexshin.weatherapp.service.AuthenticationService;
 import com.alexshin.weatherapp.util.CookieUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,14 +12,14 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 
 @WebServlet("/logout")
 public class LogOutServlet extends BaseServlet {
-    private final AuthorizationService authorizationService = AuthorizationService.getInstance();
+    private final AuthenticationService authenticationService = AuthenticationService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
 
             String login = parseLogin(req.getParameter("login"));
-            authorizationService.logOut(login);
+            authenticationService.logOut(login);
 
             CookieUtil.deleteSessionCookie(resp);
 

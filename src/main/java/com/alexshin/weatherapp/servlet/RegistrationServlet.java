@@ -13,7 +13,7 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
 
 
-@WebServlet(urlPatterns = "/registration")
+@WebServlet(urlPatterns = "/register")
 public class RegistrationServlet extends BaseServlet {
     private final RegistrationService regService = RegistrationService.getInstance();
 
@@ -29,14 +29,13 @@ public class RegistrationServlet extends BaseServlet {
 
         try {
 
-            // TODO: check login unique
             UserDTO user = new UserDTO(
                     parseLogin(req.getParameter("login")),
                     parsePassword(req.getParameter("password")),
                     parsePassword(req.getParameter("pass-repeat"))
             );
 
-            // TODO: check for session id cookie
+            // TODO: check for session id cookie, login unique
             regService.register(user);
 
             resp.sendRedirect("%s/login".formatted(rootPath));

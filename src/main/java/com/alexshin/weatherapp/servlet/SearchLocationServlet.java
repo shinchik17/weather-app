@@ -1,12 +1,12 @@
 package com.alexshin.weatherapp.servlet;
 
-import com.alexshin.weatherapp.exception.service.SuchLocationExistsException;
 import com.alexshin.weatherapp.exception.service.weatherapi.WeatherApiCallException;
+import com.alexshin.weatherapp.exception.servlet.NoLocationsFoundException;
 import com.alexshin.weatherapp.model.dto.GeocodingApiResponseDTO;
 import com.alexshin.weatherapp.model.dto.LocationDTO;
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.model.dto.WeatherApiResponseDTO;
-import com.alexshin.weatherapp.service.AuthorizationService;
+import com.alexshin.weatherapp.service.AuthenticationService;
 import com.alexshin.weatherapp.service.LocationService;
 import com.alexshin.weatherapp.service.WeatherService;
 import com.alexshin.weatherapp.util.CookieUtil;
@@ -26,7 +26,7 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parseLocationName;
 @WebServlet(urlPatterns = "/search-results")
 public class SearchLocationServlet extends BaseServlet {
     private final WeatherService weatherService = WeatherService.getInstance();
-    private final AuthorizationService authService = AuthorizationService.getInstance();
+    private final AuthenticationService authService = AuthenticationService.getInstance();
     private final LocationService locService = LocationService.getInstance();
 
     @Override
@@ -38,19 +38,30 @@ public class SearchLocationServlet extends BaseServlet {
             List<GeocodingApiResponseDTO> locationsList = weatherService.searchLocationsByName(locationName);
             List<WeatherApiResponseDTO> locsWithWeather = weatherService.getWeatherForLocationsList(locationsList);
 
-            req.setAttribute("foundLocations", locsWithWeather);
-            processTemplate("search-results", req, resp);
+            if (locsWithWeather.isEmpty()){
+                throw new NoLocationsFoundException();
+            } else {
+                req.setAttribute("foundLocations", locsWithWeather);
+            }
 
-
-        } catch (IllegalArgumentException e) {
-            // TODO: handle exception
-            throw new RuntimeException(e);
-        } catch (WeatherApiCallException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            String error;
+            if (e instanceof IllegalArgumentException) {
+                error = "Invalid location name format";
+            } else if (e instanceof WeatherApiCallException) {
+                error = "Service error. Please try again later";
+            } else if (e instanceof NoLocationsFoundException) {
+                error = "No locations found";
+            } else {
+                error = "Unknown error";
+            }
+            req.setAttribute("error", error);
         }
 
+        processTemplate("search-results", req, resp);
 
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -72,18 +83,20 @@ public class SearchLocationServlet extends BaseServlet {
 
             locService.saveLocation(location);
 
-            resp.sendRedirect(rootPath);
+        } catch (Exception e) {
+            String error;
+            if (e instanceof IllegalArgumentException) {
+                error = "Invalid location attributes format";
+            } else if (e instanceof WeatherApiCallException) {
+                error = "Service error. Please try again later";
+            } else {
+                error = "Unknown error";
+            }
 
-            // TODO: handle exception
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (WeatherApiCallException e) {
-            throw new RuntimeException(e);
-        } catch (AuthenticationException e) {
-            throw new RuntimeException(e);
-        } catch (SuchLocationExistsException e) {
-            throw new RuntimeException(e);
+            req.setAttribute("error", error);
         }
+
+        resp.sendRedirect(rootPath);
 
     }
 

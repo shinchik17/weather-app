@@ -13,6 +13,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherApiResponseDTO {
 
+    private long locationId;
+
     @JsonProperty("name")
     private String cityName;
 

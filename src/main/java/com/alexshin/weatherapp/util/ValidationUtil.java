@@ -3,7 +3,8 @@ package com.alexshin.weatherapp.util;
 public final class ValidationUtil {
     private final static String LOGIN_VALIDATE_PATTERN = "[a-zA-Z0-9@_.]{4,}";
     private final static String PASSWORD_VALIDATE_PATTERN = "[a-zA-Z0-9@_.!#$%^&*]{8,}";
-    private final static String LOCATION_VALIDATE_PATTERN = "[a-zA-zА-Яа-я \\-'.]+";
+    private final static String LOCATION_VALIDATE_PATTERN = "[a-zA-zА-Яа-я0-9 \\-'.]+";
+    private final static String LOCATION_SOFT_VALIDATE_PATTERN = "\\S+";
 
 
 
@@ -21,7 +22,7 @@ public final class ValidationUtil {
     }
 
     public static boolean isValidLocationName(String locationName_str){
-        return locationName_str != null && locationName_str.trim().matches(LOCATION_VALIDATE_PATTERN);
+        return locationName_str != null && locationName_str.trim().matches(LOCATION_SOFT_VALIDATE_PATTERN);
     }
 
 

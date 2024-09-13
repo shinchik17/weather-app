@@ -15,16 +15,16 @@ import java.util.NoSuchElementException;
 
 import static com.alexshin.weatherapp.util.EncryptionUtil.passwordMatches;
 
-public class AuthorizationService {
-    private static final AuthorizationService INSTANCE = new AuthorizationService();
+public class AuthenticationService {
+    private static final AuthenticationService INSTANCE = new AuthenticationService();
     private final UserService userService = UserService.getInstance();
     private final UserSessionService userSessionService = UserSessionService.getInstance();
     private final ModelMapper mapper = new ModelMapper();
 
-    private AuthorizationService() {
+    private AuthenticationService() {
     }
 
-    public static AuthorizationService getInstance() {
+    public static AuthenticationService getInstance() {
         return INSTANCE;
     }
 

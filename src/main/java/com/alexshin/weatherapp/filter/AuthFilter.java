@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = {"/login", "/registration"}, filterName = "AuthFilter")
+@WebFilter(urlPatterns = {"/login", "/register"}, filterName = "AuthFilter")
 public class AuthFilter extends BaseFilter {
     private final Logger logger = LogManager.getLogger();
 
