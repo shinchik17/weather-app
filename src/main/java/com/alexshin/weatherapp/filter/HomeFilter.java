@@ -37,8 +37,8 @@ public class HomeFilter extends ProtectedUrlFilter {
                     UserDTO user = authService.findUserBySessionId(optSessionId.get());
                     req.setAttribute("user", user);
                 } catch (NoSuchUserSessionException e) {
-                    CookieUtil.deleteSessionCookie(resp);
-                    redirectToRootContext(resp);
+                    CookieUtil.deleteSessionCookie(resp, rootPath);
+                    logger.info("%s -> Delete cookie".formatted(getFilterName()));
                 }
 
 

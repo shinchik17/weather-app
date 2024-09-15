@@ -20,6 +20,8 @@ public class BaseFilter extends HttpFilter {
             "", "/register", "/login", "/logout", "/search-results"
     ));
     private final Logger logger = LogManager.getLogger();
+    protected final String rootPath = getServletContext().getContextPath() + "/";
+
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -40,6 +42,6 @@ public class BaseFilter extends HttpFilter {
 
 
     protected void redirectToRootContext(HttpServletResponse resp) throws IOException {
-        resp.sendRedirect(getServletContext().getContextPath());
+        resp.sendRedirect(rootPath);
     }
 }

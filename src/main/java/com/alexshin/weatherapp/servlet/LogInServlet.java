@@ -14,7 +14,7 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
 
 @WebServlet("/login")
-public class AuthenticationServlet extends BaseServlet {
+public class LogInServlet extends BaseServlet {
     private final AuthenticationService authenticationService = AuthenticationService.getInstance();
 
     @Override
@@ -31,7 +31,7 @@ public class AuthenticationServlet extends BaseServlet {
             );
 
             UserSessionDTO session = authenticationService.logIn(userDTO);
-            CookieUtil.setSessionCookie(resp, session);
+            CookieUtil.setSessionCookie(resp, session, req.getContextPath() + "/");
 
             resp.sendRedirect(rootPath);
 

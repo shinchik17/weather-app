@@ -21,7 +21,7 @@ public class LogOutServlet extends BaseServlet {
             String login = parseLogin(req.getParameter("login"));
             authenticationService.logOut(login);
 
-            CookieUtil.deleteSessionCookie(resp);
+            CookieUtil.deleteSessionCookie(resp, rootPath);
 
             resp.sendRedirect(rootPath);
 

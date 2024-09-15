@@ -30,20 +30,22 @@ public final class CookieUtil {
 
     }
 
-    public static void setSessionCookie(HttpServletResponse resp, UserSessionDTO session){
-        resp.addCookie(createSessionCookie(session));
+    public static void setSessionCookie(HttpServletResponse resp, UserSessionDTO session, String path){
+        resp.addCookie(createSessionCookie(session, path));
     }
 
-    public static void deleteSessionCookie(HttpServletResponse resp){
+    public static void deleteSessionCookie(HttpServletResponse resp, String path){
         Cookie cookie = new Cookie("SessionId", "");
         cookie.setMaxAge(0);
+        cookie.setPath(path);
         resp.addCookie(cookie);
     }
 
-    private static Cookie createSessionCookie(UserSessionDTO session) {
+    private static Cookie createSessionCookie(UserSessionDTO session, String path) {
         Cookie cookie = new Cookie("SessionId", session.getId());
         long age = ChronoUnit.HOURS.between(LocalDateTime.now(), session.getExpiresAt());
         cookie.setMaxAge((int) age * 3600);
+        cookie.setPath(path);
 
         return cookie;
     }
