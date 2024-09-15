@@ -3,7 +3,7 @@
 
 <body>
 
-<nav th:fragment="navbar" class="navbar navbar-expand-sm navbar-light bg-light">
+<nav th:fragment="nav-bar" class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -23,8 +23,8 @@
                     <input class="form-control me-2" type="search" name="location-name" required
                            placeholder="Search for locations"
                            aria-label="Search"
-                           pattern="\S+"
-                           title="Location name should contain at least 1 character">
+                           pattern=".*\S+"
+                           title="">
                     <button class="btn btn-outline-primary" type="submit">Search</button>
                 </form>
             </div>
@@ -41,6 +41,7 @@
 
         </div>
     </div>
+    <script th:src="@{/resources/js/check-search-validity.js}"></script>
 </nav>
 
 </body>

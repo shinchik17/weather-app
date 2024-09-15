@@ -1,7 +1,7 @@
-function deleteLocation(element) {
+function deleteLocation(delBtn) {
 
-    let appContext = element.getAttribute("data-ctx")
-    let locationId = element.getAttribute("data-loc-id")
+    let appContext = delBtn.getAttribute("data-ctx")
+    let locationId = delBtn.getAttribute("data-loc-id")
 
     fetch(`${appContext}`, {
         method: 'DELETE',
@@ -13,7 +13,11 @@ function deleteLocation(element) {
     })
         .then(response => {
             if (response.ok) {
-                console.log(`Location with id=${locationId} was removed succesfully`)
+                // TODO: set label "no location found" if it aws last location
+                let card =  delBtn.closest(".col");
+                card.remove()
+                console.log(`Location with id=${locationId} was removed successfully`)
+
             } else {
                 console.error(`Failed to remove location with id=${locationId}`)
             }

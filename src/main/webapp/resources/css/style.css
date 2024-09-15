@@ -84,8 +84,10 @@ h1 {
 }
 
 .display-3 {
-    padding: 4rem 0 1rem;
+    /*padding: 1rem 0 1rem;*/
 }
+
+
 .row div{
     padding: 10px;
     /*margin-bottom: 5px;*/

@@ -3,7 +3,6 @@
 <head th:replace="~{/common/head :: head ('Login')}"></head>
 
 <body>
-<!--TODO: add link to registration form maybe?-->
 <div class="container">
     <div th:if="${error != null}" class="row">
         <h1 class="text-center display-3" th:text="${error}">Error text</h1>
@@ -13,31 +12,15 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-5 col-xxl-4">
-            <form th:action="@{/login}" method="post">
-                <div class="form-group">
-                    <label for="login">Login</label>
-                    <input class="form-control" type="text" name="login" id="login" required
-                           placeholder="Enter your login"
-                           pattern="[a-zA-Z0-9@_.]{4,}"
-                           title="Allowed letters, numbers and symbols @_., minimum 4 characters.">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input class="form-control" type="password" name="password" id="password" required
-                           placeholder="Enter your password"
-                           pattern="[a-zA-Z0-9@_.!#$%^&*]{8,}"
-                           title="Allowed letters, numbers and symbols @_.!#$%^&*, minimum 8 characters.">
-                </div>
-                <div class="form-group d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Confirm</button>
-                </div>
-
-            </form>
+            <div th:replace="~{/common/auth-form :: auth-form (false, 'login')}"></div>
         </div>
+    </div>
+    <div class="row">
+        <span>Do not have an account yet? <a th:href="@{/registration}">Create account</a></span>
     </div>
 </div>
 
-<!--<script src="../../resources/js/bootstrap.bundle.min.js"></script>-->
+
 <script th:src="@{/resources/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
