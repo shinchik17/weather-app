@@ -3,6 +3,7 @@ package com.alexshin.weatherapp.service;
 import com.alexshin.weatherapp.exception.service.ApiKeyNotFoundException;
 import com.alexshin.weatherapp.exception.service.weatherapi.WeatherApiCallException;
 import com.alexshin.weatherapp.model.dto.GeocodingApiResponseDTO;
+import com.alexshin.weatherapp.model.dto.LocationDTO;
 import com.alexshin.weatherapp.model.dto.WeatherApiResponseDTO;
 import com.alexshin.weatherapp.util.PropertiesUtil;
 import com.alexshin.weatherapp.util.ProxyUtil;
@@ -12,9 +13,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 
@@ -22,15 +25,15 @@ import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 public class WeatherService {
     private static final WeatherService INSTANCE = new WeatherService();
-    private final String API_KEY;
-    private static String protocol;
     private static final String SERVICE_URI = "api.openweathermap.org";
     private static final String WEATHER_BY_NAME_REQUEST = "/data/2.5/weather?q=%s&appid=%s&units=metric";
     private static final String WEATHER_BY_COORDS_REQUEST = "/data/2.5/weather?lat=%s&lon=%s&appid=%s&units=metric";
     private static final String GEOCODING_REQUEST = "/geo/1.0/direct?q=%s&limit=%d&appid=%s";
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private HttpClient client = createHttpClient();
     private static final int locNumLimit = Integer.parseInt(PropertiesUtil.getProperty("location.search.limit"));
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final String API_KEY;
+    private final String protocol;
+    private final HttpClient client;
 
     private WeatherService() {
         API_KEY = System.getenv("WEATHER_API_KEY");
@@ -40,7 +43,10 @@ public class WeatherService {
 
         if (ProxyUtil.isProxyPresent()){
             protocol = "http";
+        } else {
+            protocol ="https";
         }
+        client = createHttpClient();
     }
 
     public static WeatherService getInstance(){
@@ -63,7 +69,7 @@ public class WeatherService {
             });
 
         } catch (Exception e) {
-            throw new WeatherApiCallException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+            throw new WeatherApiCallException("Exception in method 'searchLocationsByName': %s".formatted(e.getMessage()));
         }
 
     }
@@ -83,7 +89,7 @@ public class WeatherService {
             return objectMapper.readValue(response.body(), WeatherApiResponseDTO.class);
 
         } catch (Exception e) {
-            throw new WeatherApiCallException("Exception in method 'getWeatherByLocationCoords': %s".formatted(e.getMessage()));
+            throw new WeatherApiCallException("Exception in method 'getWeatherByLocationName': %s".formatted(e.getMessage()));
         }
 
     }
@@ -107,7 +113,7 @@ public class WeatherService {
     }
 
 
-    public List<WeatherApiResponseDTO> getWeatherForLocationsList(List<GeocodingApiResponseDTO> locationsList) {
+    public List<WeatherApiResponseDTO> getWeatherForFoundLocationsList(List<GeocodingApiResponseDTO> locationsList) {
         return locationsList.stream()
                 .map(
                         loc -> {
@@ -119,10 +125,24 @@ public class WeatherService {
                 .toList();
     }
 
+    public List<WeatherApiResponseDTO> getWeatherForUserLocationsList(List<LocationDTO> locationsList) {
+        return locationsList.stream()
+                .map(
+                        loc -> {
+                            WeatherApiResponseDTO locWithWeather = getWeatherByLocationCoords(loc.getLatitude(), loc.getLongitude());
+                            locWithWeather.setLocationId(loc.getId());
+                            locWithWeather.setCityName(loc.getName());
+                            return locWithWeather;
+                        }
+                )
+                .toList();
+    }
+
     private HttpRequest buildGeocodingRequest(String name) throws URISyntaxException {
+        String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
         URI uri = new URI(protocol + "://" +
                 SERVICE_URI +
-                GEOCODING_REQUEST.formatted(name, locNumLimit, API_KEY));
+                GEOCODING_REQUEST.formatted(encodedName, locNumLimit, API_KEY));
 
         return HttpRequest.newBuilder()
                 .uri(uri)
@@ -140,9 +160,10 @@ public class WeatherService {
     }
 
     private HttpRequest buildWeatherByNameRequest(String name) throws URISyntaxException {
+        String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
         URI uri = new URI(protocol + "://" +
                 SERVICE_URI +
-                WEATHER_BY_NAME_REQUEST.formatted(name, API_KEY));
+                WEATHER_BY_NAME_REQUEST.formatted(encodedName, API_KEY));
 
         return HttpRequest.newBuilder()
                 .uri(uri)

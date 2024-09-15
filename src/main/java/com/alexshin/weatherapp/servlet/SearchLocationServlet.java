@@ -13,6 +13,8 @@ import com.alexshin.weatherapp.util.CookieUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.naming.AuthenticationException;
 import java.io.IOException;
@@ -28,6 +30,7 @@ public class SearchLocationServlet extends BaseServlet {
     private final WeatherService weatherService = WeatherService.getInstance();
     private final AuthenticationService authService = AuthenticationService.getInstance();
     private final LocationService locService = LocationService.getInstance();
+    private final Logger logger = LogManager.getLogger();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -36,15 +39,16 @@ public class SearchLocationServlet extends BaseServlet {
             String locationName = parseLocationName(req.getParameter("location-name"));
 
             List<GeocodingApiResponseDTO> locationsList = weatherService.searchLocationsByName(locationName);
-            List<WeatherApiResponseDTO> locsWithWeather = weatherService.getWeatherForLocationsList(locationsList);
+            List<WeatherApiResponseDTO> locsWithWeather = weatherService.getWeatherForFoundLocationsList(locationsList);
 
             if (locsWithWeather.isEmpty()){
                 throw new NoLocationsFoundException();
             } else {
-                req.setAttribute("foundLocations", locsWithWeather);
+                req.setAttribute("weatherCards", locsWithWeather);
             }
 
         } catch (Exception e) {
+            logger.error(e);
             String error;
             if (e instanceof IllegalArgumentException) {
                 error = "Invalid location name format";

@@ -35,19 +35,12 @@ public class HomeServlet extends BaseServlet {
             // TODO: check casting?
             UserDTO user = (UserDTO) req.getAttribute("user");
             List<LocationDTO> locationsList = locService.findByUser(user);
-
-            List<WeatherApiResponseDTO> locsWithWeather = locationsList.stream()
-                    .map(loc -> {
-                        var locWithWeather = weatherService.getWeatherByLocationName(loc.getName());
-                        locWithWeather.setLocationId(loc.getId());
-                        return locWithWeather;
-                    })
-                    .toList();
+            List<WeatherApiResponseDTO> locsWithWeather = weatherService.getWeatherForUserLocationsList(locationsList);
 
             if (locsWithWeather.isEmpty()) {
                 throw new NoLocationsFoundException();
             } else {
-                req.setAttribute("foundLocations", locsWithWeather);
+                req.setAttribute("weatherCards", locsWithWeather);
             }
             processTemplate("home", req, resp);
 
