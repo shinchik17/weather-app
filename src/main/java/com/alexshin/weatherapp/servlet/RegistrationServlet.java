@@ -1,6 +1,5 @@
 package com.alexshin.weatherapp.servlet;
 
-import com.alexshin.weatherapp.exception.service.AuthenticationException;
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.service.RegistrationService;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,7 +13,7 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
 
 
 @WebServlet(urlPatterns = "/register")
-public class RegistrationServlet extends BaseServlet {
+public class RegistrationServlet extends AbstractAuthServlet {
     private final RegistrationService regService = RegistrationService.getInstance();
 
 
@@ -35,17 +34,14 @@ public class RegistrationServlet extends BaseServlet {
                     parsePassword(req.getParameter("pass-repeat"))
             );
 
-            // TODO: check for session id cookie, login unique
             regService.register(user);
 
             resp.sendRedirect("%s/login".formatted(rootPath));
 
-        } catch (IllegalArgumentException e) {
-            // TODO: handle exception
-            throw new RuntimeException(e);
-        } catch (AuthenticationException e) {
-            // TODO: handle exception. JS tip?
+        } catch (Exception e) {
+            handleException(e, req);
         }
+        processTemplate("registration", req, resp);
 
     }
 

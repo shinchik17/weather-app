@@ -107,6 +107,7 @@ public class LocationRepositoryTest {
     void findAll_ifNoAnyExist() {
         locationRepository.delete(1L);
         locationRepository.delete(2L);
+        locationRepository.delete(3L);
         Assertions.assertTrue(locationRepository.findAll().isEmpty());
     }
 

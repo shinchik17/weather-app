@@ -29,7 +29,7 @@ public class WeatherServiceTest {
     private HttpResponse<String> response;
 
     @InjectMocks
-    private WeatherService weatherService;
+    private WeatherService weatherService = WeatherService.getInstance();
 
     private final String locName = "London";
 

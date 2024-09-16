@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LocationService {
     private static final LocationService INSTANCE = new LocationService();
@@ -47,6 +48,12 @@ public class LocationService {
 
     public void deleteById(long id){
         locationRepository.delete(id);
+    }
+
+
+    public Optional<LocationDTO> findById(long id){
+        Optional<Location> optLoc = locationRepository.findById(id);
+        return optLoc.map(loc -> mapper.map(loc, LocationDTO.class));
     }
 
 

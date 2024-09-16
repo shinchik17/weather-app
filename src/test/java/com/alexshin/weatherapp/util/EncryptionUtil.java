@@ -1,7 +1,5 @@
 package com.alexshin.weatherapp.util;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 public final class EncryptionUtil {
 
     private EncryptionUtil(){

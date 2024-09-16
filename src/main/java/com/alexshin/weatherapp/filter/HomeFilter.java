@@ -1,6 +1,5 @@
 package com.alexshin.weatherapp.filter;
 
-import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.service.AuthenticationService;
 import com.alexshin.weatherapp.util.CookieUtil;
@@ -29,18 +28,21 @@ public class HomeFilter extends ProtectedUrlFilter {
 
         if (optSessionId.isEmpty()) {
             logger.info("%s -> Session is empty".formatted(getFilterName()));
+
         } else {
             Optional<Object> optUser = Optional.ofNullable(req.getAttribute("user"));
+
             if (optUser.isEmpty()) {
                 logger.info("%s -> Session presents, but user is empty".formatted(getFilterName()));
-                try {
-                    UserDTO user = authService.findUserBySessionId(optSessionId.get());
-                    req.setAttribute("user", user);
-                } catch (NoSuchUserSessionException e) {
-                    CookieUtil.deleteSessionCookie(resp, rootPath);
-                    logger.info("%s -> Delete cookie".formatted(getFilterName()));
-                }
+                Optional<UserDTO> user = authService.findUserBySessionId(optSessionId.get());
 
+                if (user.isPresent()) {
+                    req.setAttribute("user", user.get());
+                    logger.info("%s -> Setting user attribute".formatted(getFilterName()));
+                } else {
+                    CookieUtil.deleteSessionCookie(resp, rootPath);
+                    logger.info("%s -> Deleting cookie".formatted(getFilterName()));
+                }
 
             }
         }

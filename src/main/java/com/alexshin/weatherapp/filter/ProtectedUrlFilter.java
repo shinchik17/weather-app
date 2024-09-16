@@ -35,8 +35,14 @@ public class ProtectedUrlFilter extends BaseFilter {
 
         Optional<Object> optUser = Optional.ofNullable(req.getAttribute("user"));
         if (optUser.isEmpty()) {
-            UserDTO user = authService.findUserBySessionId(optSessionId.get());
-            req.setAttribute("user", user);
+            Optional<UserDTO> user = authService.findUserBySessionId(optSessionId.get());
+            if (user.isEmpty()) {
+                CookieUtil.deleteSessionCookie(resp, rootPath);
+                redirectToRootContext(resp);
+                logger.info("%s -> No user found for given session, redirect to the rootContext".formatted(getFilterName()));
+                return;
+            }
+            req.setAttribute("user", user.get());
         }
 
         chain.doFilter(req, resp);

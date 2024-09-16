@@ -1,8 +1,6 @@
 package com.alexshin.weatherapp.service;
 
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
-import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
-import com.alexshin.weatherapp.exception.service.UserSessionExpiredException;
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.util.MigrationUtil;
@@ -58,22 +56,20 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void logIn_whenSessionExpired_thenThrow() {
-        Assertions.assertThrows(UserSessionExpiredException.class, () -> authService.findUserBySessionId(EXPIRED_SESSION_ID));
+    void logIn_whenSessionExpired() {
+        Assertions.assertTrue(authService.findUserBySessionId(EXPIRED_SESSION_ID).isEmpty());
     }
 
     @Test
     void logOut_ifSessionExists() {
         authService.logOut(existingUser.getLogin());
-        Assertions.assertThrows(NoSuchUserSessionException.class,
-                () -> userSessionService.findByUserLogin(existingUser.getLogin()));
+        Assertions.assertTrue(userSessionService.findByUserLogin(existingUser.getLogin()).isEmpty());
     }
 
     @Test
-    void logOut_ifSessionDoesNotExist_thenThrow() {
-        authService.logOut(existingUserWithoutSession.getLogin());
-        Assertions.assertThrows(NoSuchUserSessionException.class,
-                () -> userSessionService.findByUserLogin(existingUserWithoutSession.getLogin()));
+    void logOut_ifSessionDoesNotExist() {
+        ;
+        Assertions.assertDoesNotThrow(() -> authService.logOut(existingUserWithoutSession.getLogin()));
     }
 
 

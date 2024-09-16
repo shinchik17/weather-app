@@ -1,6 +1,6 @@
 package com.alexshin.weatherapp.service;
 
-import com.alexshin.weatherapp.exception.service.ApiKeyNotFoundException;
+import com.alexshin.weatherapp.exception.service.weatherapi.ApiKeyNotFoundException;
 import com.alexshin.weatherapp.exception.service.weatherapi.WeatherApiCallException;
 import com.alexshin.weatherapp.model.dto.GeocodingApiResponseDTO;
 import com.alexshin.weatherapp.model.dto.LocationDTO;
@@ -33,7 +33,7 @@ public class WeatherService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String API_KEY;
     private final String protocol;
-    private final HttpClient client;
+    private HttpClient client;
 
     private WeatherService() {
         API_KEY = System.getenv("WEATHER_API_KEY");

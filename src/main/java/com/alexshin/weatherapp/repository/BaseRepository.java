@@ -1,11 +1,12 @@
 package com.alexshin.weatherapp.repository;
 
-import com.alexshin.weatherapp.model.entity.BaseEntity;
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
+import com.alexshin.weatherapp.model.entity.BaseEntity;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.io.Serializable;
 import java.util.List;
@@ -53,9 +54,8 @@ public class BaseRepository<K extends Serializable, E extends BaseEntity<K>> imp
     public List<E> findAll() {
         return runWithinTxAndReturn(
                 session -> {
-                    var criteria = session.getCriteriaBuilder().createQuery(clazz);
-                    criteria.from(clazz);
-                    return session.createQuery(criteria).getResultList();
+                    Query<E> query = session.createQuery("FROM " + clazz.getSimpleName(), clazz);
+                    return query.getResultList();
                 }
         );
     }

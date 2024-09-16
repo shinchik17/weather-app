@@ -3,15 +3,13 @@ package com.alexshin.weatherapp.service;
 
 import com.alexshin.weatherapp.exception.service.IncorrectPasswordException;
 import com.alexshin.weatherapp.exception.service.NoSuchUserException;
-import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
 import com.alexshin.weatherapp.model.dto.UserDTO;
 import com.alexshin.weatherapp.model.dto.UserSessionDTO;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.model.entity.UserSession;
-import jakarta.persistence.NoResultException;
 import org.modelmapper.ModelMapper;
 
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static com.alexshin.weatherapp.util.EncryptionUtil.passwordMatches;
 
@@ -31,23 +29,20 @@ public class AuthenticationService {
 
     public UserSessionDTO logIn(UserDTO userDTO) {
 
-        User user;
-        UserSession userSession;
-        try {
-            user = userService.findByLogin(userDTO.getLogin()).orElseThrow();
 
-            if (!passwordMatches(userDTO.getPassword(), user.getPassword())) {
-                throw new IncorrectPasswordException("Incorrect password");
-            }
-
-        } catch (NoResultException | NoSuchElementException e) {
-            throw new NoSuchUserException("No user with login '%s'.".formatted(userDTO.getLogin()));
+        Optional<User> user = userService.findByLogin(userDTO.getLogin());
+        if (user.isEmpty()) {
+            throw new NoSuchUserException("No user with login '%s' registered".formatted(userDTO.getLogin()));
         }
 
-        try {
-            userSession = userSessionService.findByUserLogin(user.getLogin());
-        } catch (NoSuchUserSessionException e) {
-            userSession = userSessionService.createSession(user);
+        if (!passwordMatches(userDTO.getPassword(), user.get().getPassword())) {
+            throw new IncorrectPasswordException("Incorrect password");
+        }
+
+        Optional<UserSession> userSession = userSessionService.findByUserLogin(userDTO.getLogin());
+
+        if (userSession.isEmpty()) {
+            userSession = Optional.of(userSessionService.createSession(user.get()));
         }
 
         return mapper.map(userSession, UserSessionDTO.class);
@@ -58,19 +53,12 @@ public class AuthenticationService {
     }
 
 
-    public UserDTO findUserBySessionId(String sessionId) {
+    public Optional<UserDTO> findUserBySessionId(String sessionId) {
 
-        try {
-            userSessionService.updateUserSessionState(sessionId);
-            User user = userService.findUserBySessionId(sessionId);
-            return mapper.map(user, UserDTO.class);
+        userSessionService.updateUserSessionState(sessionId);
+        Optional<User> optUser = userService.findUserBySessionId(sessionId);
 
-        } catch (NoSuchUserException e) {
-            throw new NoSuchUserException("No user found for given SessionId");
-        } catch (NoSuchElementException e) {
-            throw new NoSuchUserSessionException("No session found for given SessionId");
-        }
-
+        return optUser.map(user -> mapper.map(user, UserDTO.class));
     }
 
 

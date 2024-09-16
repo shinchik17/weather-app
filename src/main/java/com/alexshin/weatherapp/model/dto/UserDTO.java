@@ -31,6 +31,3 @@ public final class UserDTO {
 
 }
 
-
-//public record UserDTO (Long id, String login, String password) {
-//}

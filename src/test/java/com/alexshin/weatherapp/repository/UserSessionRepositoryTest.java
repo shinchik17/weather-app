@@ -21,8 +21,8 @@ public class UserSessionRepositoryTest {
     UserSession transientUserSession;
     UserSession transientUserSession2;
 
-    User PERSISTENT_USER = User.builder()
-            .id(1L)
+    User PERSISTENT_USER_WITHOUT_SESSION = User.builder()
+            .id(3L)
             .login("test_username1")
             .password("test_pass1")
             .build();
@@ -42,7 +42,7 @@ public class UserSessionRepositoryTest {
 
         transientUserSession = UserSession.builder()
                 .id(TRANSIENT_SESSION_ID)
-                .user(PERSISTENT_USER)
+                .user(PERSISTENT_USER_WITHOUT_SESSION)
                 .expiresAt(PERSISTENT_EXPIRES_AT)
                 .build();
 
@@ -64,7 +64,7 @@ public class UserSessionRepositoryTest {
     void save_ifIdExists_thenThrow() {
         transientUserSession2 = UserSession.builder()
                 .id(PERSISTENT_SESSION_ID)
-                .user(PERSISTENT_USER)
+                .user(PERSISTENT_USER_WITHOUT_SESSION)
                 .expiresAt(PERSISTENT_EXPIRES_AT)
                 .build();
         Assertions.assertThrows(BaseRepositoryException.class, () -> userSessionRepo.save(transientUserSession2));
@@ -110,7 +110,7 @@ public class UserSessionRepositoryTest {
 
     @Test
     void deleteByUserLogin_ifExists() {
-        userSessionRepo.deleteByUserLogin(PERSISTENT_USER.getLogin());
+        userSessionRepo.deleteByUserLogin(PERSISTENT_USER_WITHOUT_SESSION.getLogin());
         Assertions.assertTrue(userSessionRepo.findById(PERSISTENT_SESSION_ID).isEmpty());
     }
 

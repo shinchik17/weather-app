@@ -14,8 +14,9 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
 
 @WebServlet("/login")
-public class LogInServlet extends BaseServlet {
+public class LogInServlet extends AbstractAuthServlet {
     private final AuthenticationService authenticationService = AuthenticationService.getInstance();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -31,15 +32,15 @@ public class LogInServlet extends BaseServlet {
             );
 
             UserSessionDTO session = authenticationService.logIn(userDTO);
-            CookieUtil.setSessionCookie(resp, session, req.getContextPath() + "/");
+            CookieUtil.setSessionCookie(resp, session, rootPath);
 
-            resp.sendRedirect(rootPath);
+            redirectToRootContext(resp);
 
-        } catch (IllegalArgumentException e) {
-            // TODO: handle exception
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            handleException(e, req);
         }
 
+        processTemplate("login", req, resp);
     }
 
 

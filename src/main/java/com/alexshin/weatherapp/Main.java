@@ -12,7 +12,6 @@ import org.hibernate.Transaction;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URISyntaxException;
 
 public class Main {
 
@@ -59,7 +58,7 @@ public class Main {
     }
 
 
-    public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException {
+    public static void main(String[] args) throws IOException {
 
         var objectMapper = new ObjectMapper();
         var service = WeatherService.getInstance();

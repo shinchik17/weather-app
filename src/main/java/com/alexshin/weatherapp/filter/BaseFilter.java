@@ -13,12 +13,13 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-// TODO: create error html-template and its support
-@WebFilter(urlPatterns = "/", filterName = "BaseFilter")
+
+@WebFilter(urlPatterns = "/*", filterName = "BaseFilter")
 public class BaseFilter extends HttpFilter {
     protected final Set<String> ALLOWED_SERVLET_PATHS = new HashSet<>(Set.of(
             "", "/register", "/login", "/logout", "/search-results"
     ));
+
     private final Logger logger = LogManager.getLogger();
     protected String rootPath;
 
@@ -34,7 +35,7 @@ public class BaseFilter extends HttpFilter {
         String method = req.getMethod();
         logger.info("%s -> Enter doFilter(), servletPath: %s, method: %s".formatted(getFilterName(), servletPath, method));
 
-        if (ALLOWED_SERVLET_PATHS.contains(servletPath)) {
+        if (ALLOWED_SERVLET_PATHS.contains(servletPath) || servletPath.contains("/resources")) {
             chain.doFilter(req, resp);
             logger.info("%s -> Process to the next filter".formatted(getFilterName()));
             return;

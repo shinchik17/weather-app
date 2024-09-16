@@ -11,7 +11,7 @@ import java.io.IOException;
 import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 
 @WebServlet("/logout")
-public class LogOutServlet extends BaseServlet {
+public class LogOutServlet extends AbstractAuthServlet {
     private final AuthenticationService authenticationService = AuthenticationService.getInstance();
 
     @Override
@@ -20,15 +20,13 @@ public class LogOutServlet extends BaseServlet {
 
             String login = parseLogin(req.getParameter("login"));
             authenticationService.logOut(login);
-
             CookieUtil.deleteSessionCookie(resp, rootPath);
 
-            resp.sendRedirect(rootPath);
-
-        } catch (IllegalArgumentException e) {
-            // TODO: handle exception
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            handleException(e, req);
         }
+
+        redirectToRootContext(resp);
 
     }
 

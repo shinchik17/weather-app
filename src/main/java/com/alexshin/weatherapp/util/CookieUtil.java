@@ -1,7 +1,6 @@
 package com.alexshin.weatherapp.util;
 
 import com.alexshin.weatherapp.model.dto.UserSessionDTO;
-import com.alexshin.weatherapp.model.entity.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public final class CookieUtil {
-    private static final String salt = BCrypt.gensalt();
 
     private CookieUtil() {
         throw new UnsupportedOperationException("CookieUtil cannot be instantiated");

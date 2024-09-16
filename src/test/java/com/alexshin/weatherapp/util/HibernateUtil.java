@@ -70,19 +70,4 @@ public final class HibernateUtil {
         return cfg;
     }
 
-
-//    public static SessionFactory getSessionFactory() {
-//        try {
-//            SessionFactory sessionFactory = configuration.buildSessionFactory();
-//            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
-//                MigrationUtil.cleanDS(configuration);
-//                MigrationUtil.runFlywayMigration(configuration);
-//            }
-//            return sessionFactory;
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-
 }

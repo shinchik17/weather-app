@@ -1,17 +1,14 @@
 package com.alexshin.weatherapp.service;
 
 
-import com.alexshin.weatherapp.exception.service.NoSuchUserSessionException;
-import com.alexshin.weatherapp.exception.service.UserSessionExpiredException;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.model.entity.UserSession;
 import com.alexshin.weatherapp.repository.UserSessionRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
 import com.alexshin.weatherapp.util.PropertiesUtil;
-import jakarta.persistence.NoResultException;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserSessionService {
@@ -49,24 +46,16 @@ public class UserSessionService {
 
 
     public void updateUserSessionState(String id) {
-        UserSession userSession = userSessionRepository.findById(id).orElseThrow();
-
-        if (!isValidSession(userSession)) {
+        Optional<UserSession> userSession = userSessionRepository.findById(id);
+        if (userSession.isPresent() && !isValidSession(userSession.get())) {
             userSessionRepository.delete(id);
-            throw new UserSessionExpiredException("Session with given id has expired");
         }
 
     }
 
 
-    public UserSession findByUserLogin(String login) {
-
-        try {
-            return userSessionRepository.findByUserLogin(login).orElseThrow();
-        } catch (NoResultException | NoSuchElementException e) {
-            throw new NoSuchUserSessionException("No session found for given user found");
-        }
-
+    public Optional<UserSession> findByUserLogin(String login) {
+        return userSessionRepository.findByUserLogin(login);
     }
 
 

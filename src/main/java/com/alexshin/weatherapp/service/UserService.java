@@ -2,15 +2,12 @@ package com.alexshin.weatherapp.service;
 
 
 import com.alexshin.weatherapp.exception.BaseRepositoryException;
-import com.alexshin.weatherapp.exception.service.NoSuchUserException;
 import com.alexshin.weatherapp.exception.service.SuchUserExistsException;
 import com.alexshin.weatherapp.model.entity.User;
 import com.alexshin.weatherapp.repository.UserRepository;
 import com.alexshin.weatherapp.util.HibernateUtil;
-import jakarta.persistence.NoResultException;
 import org.hibernate.exception.ConstraintViolationException;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class UserService {
@@ -30,21 +27,17 @@ public class UserService {
             userRepository.save(user);
         } catch (BaseRepositoryException e) {
             if (e.getCause() instanceof ConstraintViolationException) {
-                throw new SuchUserExistsException("User with login %s is already registered.");
+                throw new SuchUserExistsException(
+                        "User with login %s is already registered".formatted(user.getLogin())
+                );
             }
 
             throw e;
         }
     }
 
-    public User findUserBySessionId(String sessionId) {
-
-        try {
-            return userRepository.findBySessionId(sessionId).orElseThrow();
-        } catch (NoResultException | NoSuchElementException e) {
-            throw new NoSuchUserException("No user found for current SessionId");
-        }
-
+    public Optional<User> findUserBySessionId(String sessionId) {
+        return userRepository.findBySessionId(sessionId);
     }
 
     public Optional<User> findByLogin(String login) {
