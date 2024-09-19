@@ -46,6 +46,8 @@ public final class HibernateUtil {
                         "hibernate.connection." + propertyName.substring(3),
                         propertyValue);
             }
+
+            cfg.setProperty("hibernate.connection.password", System.getenv("DS_PASSWORD"));
         }
 
         cfg.addAnnotatedClass(User.class);
