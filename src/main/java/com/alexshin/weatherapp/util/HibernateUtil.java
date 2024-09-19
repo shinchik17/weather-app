@@ -24,7 +24,7 @@ public final class HibernateUtil {
             configuration = buildConfiguration(PropertiesUtil.getAllProperties());
             sessionFactory = configuration.buildSessionFactory();
 
-            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
+            if (Boolean.parseBoolean(PropertiesUtil.getProperty("flyway.use"))) {
                 MigrationUtil.runFlywayMigration(configuration);
             }
 
@@ -46,6 +46,9 @@ public final class HibernateUtil {
                         "hibernate.connection." + propertyName.substring(3),
                         propertyValue);
             }
+
+            cfg.setProperty("hibernate.connection.password", System.getenv("DS_PASSWORD"));
+            cfg.setProperty("hibernate.connection.url", System.getenv("DS_URL"));
         }
 
         cfg.addAnnotatedClass(User.class);

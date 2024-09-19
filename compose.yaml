@@ -1,0 +1,48 @@
+name: weather
+
+services:
+
+  app:
+    image: shinchik17/weather-app
+    container_name: tomcat_app
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    ports:
+      - "80:8080"
+    environment:
+      - BCRYPT_SALT=${BCRYPT_SALT}
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - DS_PASSWORD=${DS_PASSWORD}
+      - DS_URL=${DS_URL}
+    networks:
+      - default
+    restart: unless-stopped
+
+
+  db:
+    image: postgres:15
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DS_PASSWORD}
+    networks:
+      - default
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 5s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+
+networks:
+  default:
+    driver: bridge
+
+
+volumes:
+  db-data:
