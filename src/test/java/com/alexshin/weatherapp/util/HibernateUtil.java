@@ -35,7 +35,7 @@ public final class HibernateUtil {
             configuration = buildConfiguration(PropertiesUtil.getAllProperties());
             sessionFactory = configuration.buildSessionFactory();
 
-            if (Boolean.parseBoolean(PropertiesUtil.getProperty("use_flyway"))) {
+            if (Boolean.parseBoolean(PropertiesUtil.getProperty("flyway.use"))) {
                 MigrationUtil.runFlywayMigration(configuration);
             }
 
