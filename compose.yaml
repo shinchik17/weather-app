@@ -5,6 +5,7 @@ services:
   app:
     image: shinchik17/weather-app
     container_name: tomcat_app
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
@@ -18,7 +19,8 @@ services:
       - DS_URL=${DS_URL}
     networks:
       - default
-    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
 
   db:
@@ -27,6 +29,9 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${DS_PASSWORD}
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
     networks:
       - default
     volumes:
@@ -37,6 +42,17 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      - REPO_USER=${DOCKERHUB_USER}
+      - REPO_PASSWORD=${DOCKERHUB_PASSWORD}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval 60 --label-enable
 
 
 networks:
