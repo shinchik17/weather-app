@@ -13,7 +13,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "locations", schema = "public")
+@Table(name = "locations", schema = "public", indexes = {
+        @Index(name = "loc_user_id_index", columnList = "user_id"),
+        @Index(name = "loc_coords_index", columnList = "latitude, longitude")
+})
 public class Location implements BaseEntity<Long> {
 
     @Id
@@ -23,7 +26,7 @@ public class Location implements BaseEntity<Long> {
     @NonNull
     private String name;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
