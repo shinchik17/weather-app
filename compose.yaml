@@ -2,7 +2,7 @@ name: weather
 
 services:
 
-  app:
+  tomcat_app:
     image: shinchik17/weather-app
     container_name: tomcat_app
     restart: unless-stopped
@@ -12,6 +12,7 @@ services:
         restart: true
     ports:
       - "80:8080"
+      - "9001:9001"
     environment:
       - BCRYPT_SALT=${BCRYPT_SALT}
       - WEATHER_API_KEY=${WEATHER_API_KEY}
@@ -21,7 +22,6 @@ services:
       - default
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-
 
   db:
     image: postgres:15
@@ -54,6 +54,34 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --cleanup --interval 60 --label-enable
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - default
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prom_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - default
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
+    volumes:
+      - ./monitoring/grafana:/etc/grafana/provisioning/datasources
+
 
 networks:
   default:
@@ -62,3 +90,4 @@ networks:
 
 volumes:
   db-data:
+  prom_data:
