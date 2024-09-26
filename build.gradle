@@ -61,6 +61,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonMapperVersion}"
 
     // test dependencies
+    testImplementation "jakarta.servlet:jakarta.servlet-api:${servletApiVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
