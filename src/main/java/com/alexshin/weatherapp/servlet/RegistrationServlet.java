@@ -19,7 +19,7 @@ public class RegistrationServlet extends AbstractAuthServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        processTemplate("registration", req, resp);
+        processTemplate("registration", resp);
     }
 
 
@@ -41,7 +41,7 @@ public class RegistrationServlet extends AbstractAuthServlet {
         } catch (Exception e) {
             handleException(e, req);
         }
-        processTemplate("registration", req, resp);
+        processTemplate("registration", resp);
 
     }
 

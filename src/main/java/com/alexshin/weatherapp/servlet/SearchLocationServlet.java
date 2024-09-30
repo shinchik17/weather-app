@@ -43,7 +43,7 @@ public class SearchLocationServlet extends BaseServlet {
                 req.setAttribute("weatherCards", locsWithWeather);
             }
 
-            processTemplate("search-results", req, resp);
+            processTemplate("search-results", resp);
 
         } catch (Exception e) {
             handleExceptions(e, req, resp);
@@ -103,7 +103,7 @@ public class SearchLocationServlet extends BaseServlet {
         }
 
         req.setAttribute("message", error);
-        processTemplate("search-results", req, resp);
+        processTemplate("search-results", resp);
     }
 
 }

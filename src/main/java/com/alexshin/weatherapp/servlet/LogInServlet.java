@@ -20,7 +20,7 @@ public class LogInServlet extends AbstractAuthServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        processTemplate("login", req, resp);
+        processTemplate("login", resp);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class LogInServlet extends AbstractAuthServlet {
             handleException(e, req);
         }
 
-        processTemplate("login", req, resp);
+        processTemplate("login", resp);
     }
 
 

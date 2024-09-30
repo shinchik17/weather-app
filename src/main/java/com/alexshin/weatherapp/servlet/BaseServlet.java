@@ -28,11 +28,16 @@ public class BaseServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        webContext = ThymeleafUtil.buildWebContext(req, resp, getServletContext());
-        super.service(req, resp);
+        try {
+            webContext = ThymeleafUtil.buildWebContext(req, resp, getServletContext());
+            super.service(req, resp);
+        } catch (Exception e){
+            logger.error(e);
+            redirectToRootContext(resp);
+        }
     }
 
-    protected void processTemplate(String templateName, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void processTemplate(String templateName, HttpServletResponse resp) throws IOException {
         templateEngine.process(templateName, webContext, resp.getWriter());
     }
 

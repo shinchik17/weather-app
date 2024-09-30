@@ -42,7 +42,7 @@ public class HomeServlet extends BaseServlet {
             } else {
                 req.setAttribute("weatherCards", locsWithWeather);
             }
-            processTemplate("home", req, resp);
+            processTemplate("home", resp);
 
         } catch (Exception e) {
             handleException(e, req, resp);
@@ -95,14 +95,14 @@ public class HomeServlet extends BaseServlet {
         if (e instanceof WeatherApiCallException) {
             error = "Service error. Please try again later";
         } else if (e instanceof AuthenticationException) {
-            processTemplate("home-unauthorized", req, resp);
+            processTemplate("home-unauthorized", resp);
             return;
         } else {
             error = "Unknown error";
         }
 
         req.setAttribute("message", error);
-        processTemplate("home", req, resp);
+        processTemplate("home", resp);
     }
 
 }
