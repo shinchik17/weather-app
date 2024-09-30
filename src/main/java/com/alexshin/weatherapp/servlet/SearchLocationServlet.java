@@ -1,5 +1,6 @@
 package com.alexshin.weatherapp.servlet;
 
+import com.alexshin.weatherapp.exception.service.SuchLocationExistsException;
 import com.alexshin.weatherapp.exception.service.weatherapi.WeatherApiCallException;
 import com.alexshin.weatherapp.model.dto.GeocodingApiResponseDTO;
 import com.alexshin.weatherapp.model.dto.LocationDTO;
@@ -95,8 +96,7 @@ public class SearchLocationServlet extends BaseServlet {
             error = "Invalid location attributes format";
         } else if (e instanceof WeatherApiCallException) {
             error = "Service error. Please try again later";
-        } else if (e instanceof AuthenticationException) {
-            redirectToRootContext(resp);
+        } else if (e instanceof AuthenticationException || e instanceof SuchLocationExistsException) {
             return;
         } else {
             error = "Unknown error";

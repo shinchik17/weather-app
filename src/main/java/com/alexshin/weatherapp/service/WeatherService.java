@@ -69,7 +69,7 @@ public class WeatherService {
             });
 
         } catch (Exception e) {
-            throw new WeatherApiCallException("Exception in method 'searchLocationsByName': %s".formatted(e.getMessage()));
+            throw new WeatherApiCallException("Exception in method 'searchLocationsByName': %s".formatted(e));
         }
 
     }
