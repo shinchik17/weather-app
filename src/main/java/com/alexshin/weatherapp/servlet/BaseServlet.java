@@ -14,7 +14,8 @@ import org.thymeleaf.context.IWebContext;
 import java.io.IOException;
 
 public class BaseServlet extends HttpServlet {
-    private ITemplateEngine templateEngine;
+    protected ITemplateEngine templateEngine;
+    protected IWebContext webContext;
     protected String rootPath;
     protected final Logger logger = LogManager.getLogger();
 
@@ -25,8 +26,13 @@ public class BaseServlet extends HttpServlet {
         this.rootPath = getServletContext().getContextPath() + "/";
     }
 
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        webContext = ThymeleafUtil.buildWebContext(req, resp, getServletContext());
+        super.service(req, resp);
+    }
+
     protected void processTemplate(String templateName, HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        IWebContext webContext = ThymeleafUtil.buildWebContext(req, resp, getServletContext());
         templateEngine.process(templateName, webContext, resp.getWriter());
     }
 

@@ -2,14 +2,6 @@
     --bs-dropdown-link-hover-bg: black;
     --bs-nav-link-font-size: 1.2rem;
     --bs-light-rgb: 245, 245, 250;
-    --bs-btn-close-color: red;
-    --bs-btn-close-bg: red;
-    /*--bs-light-rgb: rgb(220, 220, 220);*/
-}
-
-body {
-    border: 5px solid black;
-    /*font-family: 'Maven Pro', sans-serif;*/
 }
 
 .nav {
@@ -19,22 +11,13 @@ body {
     white-space: nowrap;
 }
 
-
 .container {
-    border: 5px solid purple;
     margin: 0 auto;
-    /*padding: 200px 0 0 ;*/
 }
 .container label {
     font-size: 1.5rem;
-    /*margin-bottom: 15rem;*/
-    /*overflow: hidden;*/
-    /*padding-bottom: 5rem;*/
 }
 
-.form-group {
-    border: 3px solid green;
-}
 
 .form-group label {
     font-size: 2rem;
@@ -49,7 +32,6 @@ body {
 
 input[type="text"] {
     border-radius: 0.5rem;
-    /*max-width: 800px;*/
 }
 
 input[type="search"] {
@@ -58,7 +40,6 @@ input[type="search"] {
 }
 
 .ref-btn {
-    border: 2px solid red;
     padding: 30px;
 }
 
@@ -73,24 +54,12 @@ input[type="search"] {
     border-radius: 1rem;
 }
 
-h1 {
-    /*font-size: 8rem;*/
-    /*margin-bottom: 5rem;*/
-    /*padding-bottom: 5rem;*/
-}
-
 .display-1 {
     padding-bottom: 5rem
 }
 
-.display-3 {
-    /*padding: 1rem 0 1rem;*/
-}
-
-
 .row div{
     padding: 10px;
-    /*margin-bottom: 5px;*/
 }
 
 .form-check-input {

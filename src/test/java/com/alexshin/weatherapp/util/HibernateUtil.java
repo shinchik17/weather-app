@@ -30,7 +30,6 @@ public final class HibernateUtil {
 
     static {
         try {
-            // TODO: remove duplicate code of buildConfiguration()
             postgres.start();
             configuration = buildConfiguration(PropertiesUtil.getAllProperties());
             sessionFactory = configuration.buildSessionFactory();
