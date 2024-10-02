@@ -4,7 +4,7 @@ import com.alexshin.weatherapp.exception.BaseRepositoryException;
 import com.alexshin.weatherapp.exception.service.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 
-public abstract class AbstractAuthServlet extends BaseServlet {
+public abstract class AuthServlet extends BaseServlet {
 
     protected void handleException(Exception e, HttpServletRequest req){
         logger.warn(e);

@@ -13,7 +13,7 @@ import org.thymeleaf.context.IWebContext;
 
 import java.io.IOException;
 
-public class BaseServlet extends HttpServlet {
+public abstract class BaseServlet extends HttpServlet {
     protected ITemplateEngine templateEngine;
     protected IWebContext webContext;
     protected String rootPath;

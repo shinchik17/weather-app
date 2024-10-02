@@ -13,7 +13,7 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
 
 
 @WebServlet(urlPatterns = "/register")
-public class RegistrationServlet extends AbstractAuthServlet {
+public class RegistrationServlet extends AuthServlet {
     private final RegistrationService regService = RegistrationService.getInstance();
 
 

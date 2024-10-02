@@ -14,7 +14,7 @@ import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 import static com.alexshin.weatherapp.util.ParsingUtil.parsePassword;
 
 @WebServlet("/login")
-public class LogInServlet extends AbstractAuthServlet {
+public class LogInServlet extends AuthServlet {
     private final AuthenticationService authenticationService = AuthenticationService.getInstance();
 
 

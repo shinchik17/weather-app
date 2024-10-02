@@ -11,7 +11,7 @@ import java.io.IOException;
 import static com.alexshin.weatherapp.util.ParsingUtil.parseLogin;
 
 @WebServlet("/logout")
-public class LogOutServlet extends AbstractAuthServlet {
+public class LogOutServlet extends AuthServlet {
     private final AuthenticationService authenticationService = AuthenticationService.getInstance();
 
     @Override
